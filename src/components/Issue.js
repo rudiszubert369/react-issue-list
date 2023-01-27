@@ -1,33 +1,32 @@
+import './Issue.css';
 import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import ElapsedTime from './ElapsedTime';
 
-const Issue = ({ id, title, description, status, addDate, pendingDate }) => {
+const Issue = ( issue ) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(title);
-  const [editedDescription, setEditedDescription] = useState(description);
+  const [editedTitle, setEditedTitle] = useState(issue.title);
+  const [editedDescription, setEditedDescription] = useState(issue.description);
 
-  const { dispatch, issues } = useContext(IssueContext);
-  const issue = issues.find(issue => issue.id === id);
+  const { dispatch } = useContext(IssueContext);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    const issue = issues.find(issue => issue.id === id);
     dispatch({ type: 'UPDATE_ISSUE', payload: {...issue, title: editedTitle, description: editedDescription} })
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setEditedTitle(title);
-    setEditedDescription(description);
+    setEditedTitle(issue.title);
+    setEditedDescription(issue.description);
   };
 
   const handleDelete = () => {
-    dispatch({ type: 'DELETE_ISSUE', payload: id });
+    dispatch({ type: 'DELETE_ISSUE', payload: issue.id });
   };
 
   const handleStatusChange = () => {
@@ -41,22 +40,8 @@ const Issue = ({ id, title, description, status, addDate, pendingDate }) => {
     }
   };
 
-  const statusButtonText = () => {
-    switch (issue.status) {
-        case 'open':
-        return 'Move to pending';
-        case 'pending':
-        return 'Mark as complete'
-        case 'complete':
-        return 'Completed'
-        default:
-        return 'Complete'
-    }
-  }
-  console.log(statusButtonText())
-
   return (
-    <div>
+    <div className="issue">
       {isEditing ? (
         <Fragment>
           <input
@@ -74,19 +59,18 @@ const Issue = ({ id, title, description, status, addDate, pendingDate }) => {
         </Fragment>
       ) : (
         <Fragment>
-          <h3>{title}</h3>
-          <p>{addDate}</p>
-          <p>{description}</p>
-          <p>{status}</p>
-          {status !== 'open' ? <ElapsedTime startDate={pendingDate} isCounting={status === 'pending'} />  : null}
+          <h3>{issue.title}</h3>
+          <p>{issue.addDate}</p>
+          <p>{issue.description}</p>
+          <p>{issue.status}</p>
+          {issue.status !== 'open' ? <ElapsedTime startDate={issue.pendingDate} isCounting={issue.status === 'pending'} />  : null}
           <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleStatusChange}>{statusButtonText()}</button>
+          <button onClick={handleStatusChange}>change status ad change the name of the fucking button</button>
           <button onClick={handleDelete}>Delete</button>
         </Fragment>
       )}
     </div>
   );
 };
-
 
 export default Issue;

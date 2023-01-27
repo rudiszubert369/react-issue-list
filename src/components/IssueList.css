@@ -1,0 +1,30 @@
+.open-issues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ccffcc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  
+  .pending-issues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffcc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  
+  .complete-issues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffcccc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  
