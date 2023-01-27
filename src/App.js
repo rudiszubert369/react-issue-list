@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { useReducer, useState } from 'react';
+import AddEditIssue from './components/AddEditIssue';
+import IssueList from './components/IssueList';
+import { initialState, reducer } from './components/state';
+import IssueContext from './components/IssueContext';
 
-function App() {
+
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [id, setId] = useState(0);
+
+  const addIssue = (title, description) => {
+    setId(id + 1);
+    dispatch({
+      type: 'ADD_ISSUE',
+      payload: { id, title, description }
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <IssueContext.Provider value={{ ...state, dispatch }}>
+      <IssueList />
+      <AddEditIssue addIssue={addIssue} />
+    </IssueContext.Provider>
   );
-}
+};
 
 export default App;
