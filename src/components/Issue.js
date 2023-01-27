@@ -2,18 +2,21 @@ import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import ElapsedTime from './ElapsedTime';
 
-const Issue = ({ id, title, description, status, date }) => {
+const Issue = ({ id, title, description, status, addDate, pendingDate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedDescription, setEditedDescription] = useState(description);
+
   const { dispatch, issues } = useContext(IssueContext);
+  const issue = issues.find(issue => issue.id === id);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    
+    const issue = issues.find(issue => issue.id === id);
+    dispatch({ type: 'UPDATE_ISSUE', payload: {...issue, title: editedTitle, description: editedDescription} })
     setIsEditing(false);
   };
 
@@ -28,10 +31,29 @@ const Issue = ({ id, title, description, status, date }) => {
   };
 
   const handleStatusChange = () => {
-    const issue = issues.find(issue => issue.id === id);
     let newStatus = issue.status === "open" ? 'pending' : 'complete';
-    dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus} });
+    if (newStatus === 'pending') {
+        const date = new Date();
+        const dateString = date.toString()
+        dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus, pendingDate: dateString } });
+    } else {
+        dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus } }); 
+    }
   };
+
+  const statusButtonText = () => {
+    switch (issue.status) {
+        case 'open':
+        return 'Move to pending';
+        case 'pending':
+        return 'Mark as complete'
+        case 'complete':
+        return 'Completed'
+        default:
+        return 'Complete'
+    }
+  }
+  console.log(statusButtonText())
 
   return (
     <div>
@@ -53,12 +75,12 @@ const Issue = ({ id, title, description, status, date }) => {
       ) : (
         <Fragment>
           <h3>{title}</h3>
-          <p>{date}</p>
+          <p>{addDate}</p>
           <p>{description}</p>
           <p>{status}</p>
-          {status !== 'open' ? <ElapsedTime startDate={date} isCounting={status === 'pending'} />  : null}
+          {status !== 'open' ? <ElapsedTime startDate={pendingDate} isCounting={status === 'pending'} />  : null}
           <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleStatusChange}>Change status</button>
+          <button onClick={handleStatusChange}>{statusButtonText()}</button>
           <button onClick={handleDelete}>Delete</button>
         </Fragment>
       )}

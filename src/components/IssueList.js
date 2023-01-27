@@ -7,7 +7,6 @@ const IssueList = () => {
   const statuses = ['open', 'pending', 'complete'];
 
   return (
-
     <Fragment>
       {statuses.map(status => (
         <div>

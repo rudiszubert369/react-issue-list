@@ -9,7 +9,6 @@ export const reducer = (state, action) => {
         case 'DELETE_ISSUE':
         return { ...state, issues: state.issues.filter(issue => issue.id !== action.payload) };
         case 'UPDATE_ISSUE':
-            console.log(action.payload)
         return {
             ...state,
             issues: state.issues.map(issue =>

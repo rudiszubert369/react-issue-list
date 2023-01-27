@@ -11,7 +11,7 @@ const AddIssue = () => {
     if (issue.title && issue.description) {
       const date = new Date();
       const dateString = date.toString()
-      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, date: dateString} });
+      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, addDate: dateString} });
       setIssue( {description: '', title: '' } );
       setError('');
     } else {
