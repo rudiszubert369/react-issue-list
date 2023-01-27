@@ -9,8 +9,9 @@ const AddIssue = () => {
   const handleSubmit = e => {
     e.preventDefault();
     if (issue.title && issue.description) {
-      const currentDate = new Date();
-      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, date: currentDate.toString()} });
+      const date = new Date();
+      const dateString = date.toString()
+      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, date: dateString} });
       setIssue( {description: '', title: '' } );
       setError('');
     } else {

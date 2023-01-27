@@ -16,6 +16,13 @@ export const reducer = (state, action) => {
             issue.id === action.payload.id ? action.payload : issue
             )
         };
+        case 'SET_STORED_STATE':
+            if(action.payload && action.payload.issues && action.payload.nextId){
+                return action.payload;
+            }else{
+                return state;
+            }
+        
         default:
         return state;
     }
