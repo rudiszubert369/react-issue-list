@@ -1,26 +1,18 @@
-import { useReducer, useState } from 'react';
-import AddEditIssue from './components/AddEditIssue';
+import { useReducer } from 'react';
+import AddIssue from './components/AddIssue';
 import IssueList from './components/IssueList';
-import { initialState, reducer } from './components/state';
+import { initialState } from './components/state';
+import { reducer } from './components/reducer';
 import IssueContext from './components/IssueContext';
 
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [id, setId] = useState(0);
-
-  const addIssue = (title, description) => {
-    setId(id + 1);
-    dispatch({
-      type: 'ADD_ISSUE',
-      payload: { id, title, description }
-    });
-  };
 
   return (
     <IssueContext.Provider value={{ ...state, dispatch }}>
       <IssueList />
-      <AddEditIssue addIssue={addIssue} />
+      <AddIssue />
     </IssueContext.Provider>
   );
 };

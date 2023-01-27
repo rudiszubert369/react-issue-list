@@ -1,16 +1,20 @@
 import { useContext, useState } from 'react';
 import IssueContext from './IssueContext';
 
-const AddEditIssue = () => {
-  const { currentIssue, dispatch } = useContext(IssueContext);
-  const [issue, setIssue] = useState(currentIssue || {});
+const AddIssue = () => {
+  const { dispatch, nextId } = useContext(IssueContext);
+  const [issue, setIssue] = useState({});
+  const [error, setError] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (issue.id) {
-      dispatch({ type: 'UPDATE_ISSUE', payload: issue });
+    if (issue.title && issue.description) {
+      const currentDate = new Date();
+      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, date: currentDate.toString()} });
+      setIssue( {description: '', title: '' } );
+      setError('');
     } else {
-      dispatch({ type: 'ADD_ISSUE', payload: issue });
+      setError('Title and description cannot be empty');
     }
   };
 
@@ -39,10 +43,10 @@ const AddEditIssue = () => {
         />
       </label>
       <br />
+      {error ? error : null}
       <button type="submit">Save</button>
-      <button onClick={() => dispatch({ type: 'SET_CURRENT_ISSUE', payload: null })}>Cancel</button>
     </form>
   );
 };
 
-export default AddEditIssue;
+export default AddIssue;
