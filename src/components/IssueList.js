@@ -1,4 +1,4 @@
-import { useContext, Fragment } from 'react';
+import { useContext } from 'react';
 import IssueContext from './IssueContext';
 import Issue from './Issue';
 import './IssueList.css'
@@ -9,7 +9,7 @@ const IssueList = () => {
   const statuses = ['open', 'pending', 'complete'];
 
   return (
-    <Fragment>
+    <div>
       {statuses.map(status => (
         <div className={`${status}-issues`}>
           <p>{status}</p>
@@ -18,7 +18,7 @@ const IssueList = () => {
           ))}
         </div>
       ))}
-    </Fragment>
+    </div>
   );
 };
 

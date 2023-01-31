@@ -2,24 +2,40 @@ import './Issue.css';
 import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import ElapsedTime from './ElapsedTime';
-import { animated, useSpring } from 'react-spring'
+import { animated, useSpring, useTransition } from 'react-spring'
 
 
 const Issue = ( issue ) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(issue.title);
   const [editedDescription, setEditedDescription] = useState(issue.description);
-  // const [fade, setFade] = useSpring(() => ({ opacity: 1 }));
 
 
   const { dispatch } = useContext(IssueContext);
 
-const fade = useSpring({
-  from: { opacity: 0 },
-  to: { opacity: 1 },
-})
 
+  const transition = useSpring({
+    from: { transform: 'translateX(-100%)' },
+    to: { transform: 'translateX(0%)' },
+    config: { duration: 500 },
+  });
 
+  // const transitions = useTransition(issue, item => item.id, {
+  //   from: { opacity: 1, transform: 'translate3d(0,40px,0)' },
+  //   enter: { opacity: 1, transform: 'translate3d(0,0px,0)' },
+  //   leave: { opacity: 0, transform: 'translate3d(0,-40px,0)' },
+  // });
+
+  const colorChange = useSpring({
+    from: { backgroundColor: issue.status === 'open' ? 'green' : 'orange' },
+    to: { backgroundColor: issue.status === 'pending' ? 'orange' : 'red' },
+    config: { duration: 500 },
+  });
+
+  const fade = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  })
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -42,17 +58,24 @@ const fade = useSpring({
 
   const handleStatusChange = () => {
     let newStatus = issue.status === "open" ? 'pending' : 'complete';
-    if (newStatus === 'pending') {
-        const date = new Date();
-        const dateString = date.toString()
-        dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus, pendingDate: dateString } });
-    } else {
-        dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus } });
-    }
+    dispatch({
+      type: 'UPDATE_ISSUE',
+      payload: {
+        ...issue,
+        status: newStatus,
+        ...(newStatus === 'pending' ? { pendingDate: getDate() } : {}),
+        ...(newStatus === 'complete' ? { completeDate: getDate() } : {})
+      }
+    });
   };
 
+  function getDate() {
+    const date = new Date();
+    return date.toString();
+  }
+
   return (
-    <animated.div className="issue" style={fade} >
+    <animated.div className="issue"  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }} >
       {isEditing ? (
         <Fragment>
           <input
@@ -74,9 +97,18 @@ const fade = useSpring({
           <p>{issue.addDate}</p>
           <p>{issue.description}</p>
           <p>{issue.status}</p>
-          {issue.status !== 'open' ? <ElapsedTime startDate={issue.pendingDate} isCounting={issue.status === 'pending'} />  : null}
+          {issue.status !== 'open' ? (
+            <ElapsedTime
+              startDate={issue.pendingDate}
+              completedDate={issue.completeDate ?  issue.completeDate : null}
+            />
+          ) : null}
           <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleStatusChange}>change status ad change the name of the fucking button</button>
+          {issue.status === 'complete' ? null : (
+            <button onClick={handleStatusChange}>
+              {issue.status === 'open' ? 'Move to Pending' : 'Mark as Complete'}
+            </button>
+          )}
           <button onClick={handleDelete}>Delete</button>
         </Fragment>
       )}
