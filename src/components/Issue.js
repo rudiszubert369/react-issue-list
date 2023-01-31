@@ -1,8 +1,8 @@
 import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
-import ElapsedTime from './ElapsedTime';
+import Timer from './Timer';
 import { animated, useSpring, useTransition } from 'react-spring'
-import styles from './Issue.module.css';
+import styles from './Issue.module.scss';
 
 
 const Issue = ( issue ) => {
@@ -74,6 +74,20 @@ const Issue = ( issue ) => {
     return date.toString();
   }
 
+  const countdownTime  = ()  => {
+    let countDownTime = {};
+    if (issue.daysRemaining) {
+      countDownTime.days = issue.daysRemaining;
+    }
+    if (issue.hoursRemaining) {
+      countDownTime.hours = issue.hoursRemaining;
+    }
+    if (issue.minutesRemaining) {
+      countDownTime.minutes = issue.minutesRemaining;
+    }
+    return countDownTime
+  }
+
   return (
     <animated.div className={styles.issue}  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }} >
       {isEditing ? (
@@ -97,17 +111,18 @@ const Issue = ( issue ) => {
           <p>{issue.addDate}</p>
           <p>{issue.description}</p>
           <p>{issue.status}</p>
-          {issue.status !== 'open' ? (
-            <ElapsedTime
+            <Timer
               startDate={issue.pendingDate}
               completedDate={issue.completeDate ?  issue.completeDate : null}
+              countDownTime={countdownTime() ? countdownTime() : null}
             />
-          ) : null}
-          <button onClick={handleEdit}>Edit</button>
           {issue.status === 'complete' ? null : (
+            <>
+            <button onClick={handleEdit}>Edit</button>
             <button onClick={handleStatusChange}>
               {issue.status === 'open' ? 'Move to Pending' : 'Mark as Complete'}
             </button>
+            </>
           )}
           <button onClick={handleDelete}>Delete</button>
         </Fragment>

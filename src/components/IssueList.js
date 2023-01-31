@@ -1,9 +1,7 @@
 import { useContext } from 'react';
 import IssueContext from './IssueContext';
 import Issue from './Issue';
-import styles from './IssueList.module.css'
-
-
+import styles from './IssueList.module.scss'
 const IssueList = () => {
   const { issues } = useContext(IssueContext);
   const statuses = ['open', 'pending', 'complete'];

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useTransition, animated } from "react-spring";
 import IssueContext from './IssueContext';
-import styles from './AddIssue.module.css';
+import styles from './AddIssue.module.scss';
 
 const AddIssue = () => {
   const { dispatch, nextId } = useContext(IssueContext);
@@ -14,7 +14,7 @@ const AddIssue = () => {
       const date = new Date();
       const dateString = date.toString()
       dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, addDate: dateString} });
-      setIssue( {description: '', title: '' } );
+      setIssue( {description: '', title: '', daysRemaining: '' } );
       setError('');
     } else {
       setError('Title and description cannot be empty');
@@ -24,6 +24,7 @@ const AddIssue = () => {
   const handleChange = e => {
     setIssue({ ...issue, [e.target.name]: e.target.value });
   };
+
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -47,6 +48,16 @@ const AddIssue = () => {
           onChange={handleChange}
         />
       </label>
+      <div className={styles.timeContainer}>
+        <label for="days">Days:</label>
+        <input type="number" id="days" name="daysRemaining" min="0" value={issue.daysRemaining || ''} onChange={handleChange} />
+        <br />
+        <label for="hours">Hours:</label>
+        <input type="number" id="hours" name="hoursRemaining" min="0" value={issue.hoursRemaining || ''} onChange={handleChange} />
+        <br />
+        <label for="minutes">Minutes:</label>
+        <input type="number" id="minutes" name="minutesRemaining" min="0" value={issue.minutesRemaining || ''} onChange={handleChange} />
+      </div>
       <br />
       {error ? <p className={styles.error}>{error}</p> : null}
       <button className={styles.button} type="submit">Save</button>
