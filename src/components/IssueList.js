@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import IssueContext from './IssueContext';
 import Issue from './Issue';
-import './IssueList.css'
+import styles from './IssueList.module.css'
 
 
 const IssueList = () => {
@@ -11,7 +11,7 @@ const IssueList = () => {
   return (
     <div>
       {statuses.map(status => (
-        <div className={`${status}-issues`}>
+        <div className={styles[`${status}-issues`]}>
           <p>{status}</p>
           {issues.filter(issue => issue.status === status).map(issue => (
             <Issue key={issue.id} {...issue} />

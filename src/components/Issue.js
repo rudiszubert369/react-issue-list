@@ -1,8 +1,8 @@
-import './Issue.css';
 import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import ElapsedTime from './ElapsedTime';
 import { animated, useSpring, useTransition } from 'react-spring'
+import styles from './Issue.module.css';
 
 
 const Issue = ( issue ) => {
@@ -75,7 +75,7 @@ const Issue = ( issue ) => {
   }
 
   return (
-    <animated.div className="issue"  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }} >
+    <animated.div className={styles.issue}  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }} >
       {isEditing ? (
         <Fragment>
           <input

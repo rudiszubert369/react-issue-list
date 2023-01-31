@@ -1,14 +1,12 @@
 import { useContext, useState } from 'react';
-import { useSpring, animated } from "react-spring";
+import { useTransition, animated } from "react-spring";
 import IssueContext from './IssueContext';
-import './AddIssue.css';
+import styles from './AddIssue.module.css';
 
 const AddIssue = () => {
   const { dispatch, nextId } = useContext(IssueContext);
   const [issue, setIssue] = useState({});
   const [error, setError] = useState('');
-  
-  const fade = useSpring({ from: { opacity: 0 }, opacity: 1 });
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -28,11 +26,11 @@ const AddIssue = () => {
   };
 
   return (
-    <animated.form style={fade} className="form" onSubmit={handleSubmit}>
-      <label className="label">
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <label className={styles.label}>
         Title:
         <input
-          className="input"
+          className={styles.input}
           type="text"
           name="title"
           value={issue.title || ''}
@@ -40,19 +38,19 @@ const AddIssue = () => {
         />
       </label>
       <br />
-      <label className="label">
+      <label className={styles.label}>
         Description:
         <textarea
-          className="textarea"
+          className={styles.textarea}
           name="description"
           value={issue.description || ''}
           onChange={handleChange}
         />
       </label>
       <br />
-      {error ? <p className="error">{error}</p> : null}
-      <button className="button" type="submit">Save</button>
-    </animated.form>
+      {error ? <p className={styles.error}>{error}</p> : null}
+      <button className={styles.button} type="submit">Save</button>
+    </form>
   );
 };
 
