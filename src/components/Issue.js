@@ -2,13 +2,24 @@ import './Issue.css';
 import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import ElapsedTime from './ElapsedTime';
+import { animated, useSpring } from 'react-spring'
+
 
 const Issue = ( issue ) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(issue.title);
   const [editedDescription, setEditedDescription] = useState(issue.description);
+  // const [fade, setFade] = useSpring(() => ({ opacity: 1 }));
+
 
   const { dispatch } = useContext(IssueContext);
+
+const fade = useSpring({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+})
+
+
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -36,12 +47,12 @@ const Issue = ( issue ) => {
         const dateString = date.toString()
         dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus, pendingDate: dateString } });
     } else {
-        dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus } }); 
+        dispatch({ type:'UPDATE_ISSUE',  payload: {...issue, status: newStatus } });
     }
   };
 
   return (
-    <div className="issue">
+    <animated.div className="issue" style={fade} >
       {isEditing ? (
         <Fragment>
           <input
@@ -69,8 +80,8 @@ const Issue = ( issue ) => {
           <button onClick={handleDelete}>Delete</button>
         </Fragment>
       )}
-    </div>
-  );
+    </animated.div>
+    );
 };
 
 export default Issue;

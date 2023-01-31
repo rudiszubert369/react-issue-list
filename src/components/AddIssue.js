@@ -1,10 +1,14 @@
 import { useContext, useState } from 'react';
+import { useSpring, animated } from "react-spring";
 import IssueContext from './IssueContext';
+import './AddIssue.css';
 
 const AddIssue = () => {
   const { dispatch, nextId } = useContext(IssueContext);
   const [issue, setIssue] = useState({});
   const [error, setError] = useState('');
+  
+  const fade = useSpring({ from: { opacity: 0 }, opacity: 1 });
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -24,10 +28,11 @@ const AddIssue = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
+    <animated.form style={fade} className="form" onSubmit={handleSubmit}>
+      <label className="label">
         Title:
         <input
+          className="input"
           type="text"
           name="title"
           value={issue.title || ''}
@@ -35,18 +40,19 @@ const AddIssue = () => {
         />
       </label>
       <br />
-      <label>
+      <label className="label">
         Description:
         <textarea
+          className="textarea"
           name="description"
           value={issue.description || ''}
           onChange={handleChange}
         />
       </label>
       <br />
-      {error ? error : null}
-      <button type="submit">Save</button>
-    </form>
+      {error ? <p className="error">{error}</p> : null}
+      <button className="button" type="submit">Save</button>
+    </animated.form>
   );
 };
 
