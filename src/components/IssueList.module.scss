@@ -7,7 +7,7 @@
     margin: 10px;
     border-radius: 10px;
   }
-  
+
   .pending-issues {
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@
     margin: 10px;
     border-radius: 10px;
   }
-  
+
   .complete-issues {
     display: flex;
     flex-direction: column;
@@ -28,5 +28,40 @@
     border-radius: 10px;
   }
 
-  
-  
+  .sortBy {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    p {
+      margin-right: 10px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    select {
+      padding: 10px 20px;
+      border-radius: 5px;
+      background-color: #eee;
+      border: none;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 0 5px #ddd;
+      appearance: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #ddd;
+      }
+
+      &:focus {
+        background-color: #fff;
+        box-shadow: 0 0 5px #aaa;
+      }
+
+      &::-ms-expand {
+        display: none;
+      }
+    }
+  }

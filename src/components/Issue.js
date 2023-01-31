@@ -1,7 +1,7 @@
 import { Fragment, useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import Timer from './Timer';
-import { animated, useSpring, useTransition } from 'react-spring'
+import { animated, useSpring } from 'react-spring'
 import styles from './Issue.module.scss';
 
 
@@ -19,12 +19,6 @@ const Issue = ( issue ) => {
     to: { transform: 'translateX(0%)' },
     config: { duration: 500 },
   });
-
-  // const transitions = useTransition(issue, item => item.id, {
-  //   from: { opacity: 1, transform: 'translate3d(0,40px,0)' },
-  //   enter: { opacity: 1, transform: 'translate3d(0,0px,0)' },
-  //   leave: { opacity: 0, transform: 'translate3d(0,-40px,0)' },
-  // });
 
   const colorChange = useSpring({
     from: { backgroundColor: issue.status === 'open' ? 'green' : 'orange' },
