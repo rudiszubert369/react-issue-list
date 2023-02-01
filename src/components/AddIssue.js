@@ -11,9 +11,8 @@ const AddIssue = () => {
   const handleSubmit = e => {
     e.preventDefault();
     if (issue.title && issue.description) {
-      const date = new Date();
-      const dateString = date.toString()
-      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, addDate: dateString} });
+      const currentDate = new Date();
+      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, startDate: currentDate.toString()} });
       setIssue({ description: '', title: '', daysRemaining: '' });
       setError('');
       setShowForm(false);

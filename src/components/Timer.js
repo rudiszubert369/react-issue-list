@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
 
-// import { useState, useEffect } from 'react';
-
 function Timer({ startDate, completedDate, countDownTime }) {
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
-  const [remainingTime, setRemainingTime] = useState("");
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });//TODO same formatting?
 
   useEffect(() => {
     let intervalId = null;
-    const start = new Date(startDate);
+    let intervalId2 = null;
 
-    const computeTime = (startTime, endTime) => {
-      const elapsed = endTime ? new Date(endTime) - startTime : new Date() - startTime;
+    const computeElapsedTime = () => {
+      const start = new Date(startDate);
+      const elapsed = completedDate ? new Date(completedDate) - start : new Date() - start;
       const elapsedSeconds = elapsed / 1000;
       const elapsedMinutes = elapsedSeconds / 60;
       const elapsedHours = elapsedMinutes / 60;
@@ -19,52 +23,77 @@ function Timer({ startDate, completedDate, countDownTime }) {
       let hours = Math.floor(elapsedHours) % 24;
       let minutes = Math.floor(elapsedMinutes) % 60;
       let seconds = Math.floor(elapsedSeconds) % 60;
-      let days = Math.floor(elapsedHours/24);
+      let days = Math.floor(elapsedHours / 24);
 
       return days > 0
         ? `${days} days ${hours}:${minutes}:${seconds}`
-        : `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        : `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
     };
 
-    const computeRemainingTime = () => {
-      let { days = 0, hours = 0, minutes = 0 } = countDownTime || {};
-      hours = hours + 24 * days;
-      minutes = minutes + 60 * hours;
-      const remainingSeconds = minutes * 60;
-      let remaining = start - new Date() + remainingSeconds * 1000;
-      intervalId = setInterval(() => {
-        remaining -= 1000;
-        if (remaining <= 0) {
-          clearInterval(intervalId);
-        } else {
-          const remainingSecondsFormatted = Math.floor(remaining / 1000) % 60;
-          const remainingMinutesFormatted = Math.floor(remaining / (60 * 1000)) % 60;
-          const remainingHoursFormatted = Math.floor(remaining / (60 * 60 * 1000)) % 24;
-          setRemainingTime(
-            `${String(remainingHoursFormatted).padStart(2, '0')}:${String(
-              remainingMinutesFormatted
-            ).padStart(2, '0')}:${String(remainingSecondsFormatted).padStart(2, '0')}`
-          );
-        }
-      }, 1000);
+    const computeTimeLeft = () => {
+      if (!startDate) {
+        const days = Math.floor(countDownTime / (60 * 24));
+        const hours = Math.floor((countDownTime % (60 * 24)) / 60);
+        const minutes = countDownTime % 60;
+
+        return {
+          days,
+          hours,
+          minutes,
+          seconds: 0,
+        };
+      }
+
+      const start = new Date(startDate).getTime();
+      const now = new Date().getTime();
+      const remainingTime = start + countDownTime * 60 * 1000 - now;
+
+      if (remainingTime < 0) {
+        return {
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        };
+      }
+
+      return {
+        days: Math.floor(remainingTime / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((remainingTime % (1000 * 60)) / 1000),
+      };
     };
 
     if (countDownTime) {
-      computeRemainingTime();
+      setTimeLeft(computeTimeLeft())
     }
-    setElapsedTime(computeTime(start, completedDate));
-    if (!completedDate) {
-      intervalId = setInterval(() => setElapsedTime(computeTime(start, completedDate)), 1000);
+
+    setElapsedTime(computeElapsedTime());
+
+
+    if (startDate) {
+      intervalId = setInterval(() => setElapsedTime(computeElapsedTime()), 1000);
     }
-    return () => clearInterval(intervalId);
+
+    if (countDownTime && startDate ) {
+      intervalId2 = setInterval(() => setTimeLeft(computeTimeLeft()), 1000);
+    }
+
+
+    return () => {
+      clearInterval(intervalId);
+      clearInterval(intervalId2);
+    };
   }, [startDate, completedDate, countDownTime]);
 
-  const elapsedMessage = `${!completedDate ? 'Elapsed time' : 'Total time'} : ${elapsedTime}`;
 
+  const elapsedMessage = `${!completedDate ? "Elapsed time" : "Total time"} : ${elapsedTime}`;
 
   return <div>
-    {`ss` + remainingTime}
     {startDate ? elapsedMessage : null}
+    {timeLeft.days} days {timeLeft.hours} hours {timeLeft.minutes} minutes {timeLeft.seconds} seconds
+
     </div>;
 }
 

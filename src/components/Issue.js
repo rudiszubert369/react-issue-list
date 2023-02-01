@@ -68,18 +68,8 @@ const Issue = ( issue ) => {
     return date.toString();
   }
 
-  const countdownTime  = ()  => {
-    let countDownTime = {};
-    if (issue.daysRemaining) {
-      countDownTime.days = issue.daysRemaining;
-    }
-    if (issue.hoursRemaining) {
-      countDownTime.hours = issue.hoursRemaining;
-    }
-    if (issue.minutesRemaining) {
-      countDownTime.minutes = issue.minutesRemaining;
-    }
-    return countDownTime
+  const calcCountdownMinutes  = ()  => {
+    return  (issue.daysRemaining || 0) * 1440 + (issue.hoursRemaining || 0) * 60 + (issue.minutesRemaining || 0);
   }
 
   return (
@@ -102,13 +92,13 @@ const Issue = ( issue ) => {
       ) : (
         <Fragment>
           <h3>{issue.title}</h3>
-          <p>{issue.addDate}</p>
+          <p>{issue.startDate}</p>
           <p>{issue.description}</p>
           <p>{issue.status}</p>
             <Timer
               startDate={issue.pendingDate}
-              completedDate={issue.completeDate ?  issue.completeDate : null}
-              countDownTime={countdownTime() ? countdownTime() : null}
+              completedDate={issue.completeDate}
+              countDownTime={calcCountdownMinutes()}
             />
           {issue.status === 'complete' ? null : (
             <>
