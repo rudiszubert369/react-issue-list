@@ -4,7 +4,7 @@ import IssueList from './components/IssueList';
 import { initialState } from './components/state';
 import { reducer } from './components/reducer';
 import IssueContext from './components/IssueContext';
-import Layout from './components/Layout'
+import Layout from './components/Layout';
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -20,7 +20,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (state.issues.length) {
+    if (state.nextId !== 1) { //doesn't save to localStorage if initial state is used
       localStorage.setItem('myState', JSON.stringify(state));
     }
   }, [state]);
