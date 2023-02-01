@@ -4,7 +4,7 @@ import IssueList from './components/IssueList';
 import { initialState } from './components/state';
 import { reducer } from './components/reducer';
 import IssueContext from './components/IssueContext';
-
+import Layout from './components/Layout'
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -27,8 +27,10 @@ const App = () => {
 
   return (
     <IssueContext.Provider value={{ ...state, dispatch }}>
-      <IssueList />
-      <AddIssue />
+      <Layout>
+        <IssueList />
+        <AddIssue />
+      </Layout>
     </IssueContext.Provider>
   );
 };

@@ -8,18 +8,20 @@ const IssueList = () => {
   const { issues } = useContext(IssueContext);
   const statuses = ['open', 'pending', 'complete'];
   const [sortBy, setSortBy] = useState({
-    open: 'addDate',
-    pending: 'addDate',
-    complete: 'addDate',
+    open: 'oldest',
+    pending: 'oldest',
+    complete: 'oldest',
   });
 
   return (
-    <div>
+    <div className= { styles.wrapper }>
     {statuses.map(status => {
       const filteredIssues = issues.filter(issue => issue.status === status);
       const sortedIssues = [...filteredIssues].sort((a, b) => {
-        if (sortBy[status] === 'addDate') {
-          return new Date(a.addDate) - new Date(b.addDate);
+        if (sortBy[status] === 'oldest') {
+          return new Date(a.startDate) - new Date(b.startDate);
+        } else if (sortBy[status] === 'newest') {
+          return new Date(b.startDate) - new Date(a.startDate);
         } else if (sortBy[status] === 'title') {
           return a.title.localeCompare(b.title);
         }
@@ -30,8 +32,9 @@ const IssueList = () => {
           <div className={styles.sortBy}>
             <p>Sort By:</p>
             <select value={sortBy[status]} onChange={e => setSortBy({ ...sortBy, [status]: e.target.value })}>
-              <option value="addDate">Start Date</option>
-              <option value="title">Name</option>
+              <option value="oldest">Oldest</option>
+              <option value="newest">Newest</option>
+              <option value="title">Title</option>
             </select>
           </div>
           <p>{status}</p>

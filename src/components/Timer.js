@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
 
-function Timer({ startDate, completedDate, countDownTime }) {
-  const [elapsedTime, setElapsedTime] = useState("00:00:00");
+
+
+const Timer = ({ startDate, completedDate, countDownTime }) => {
+  const [elapsedTime, setElapsedTime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
-  });//TODO same formatting?
+  });
 
   useEffect(() => {
     let intervalId = null;
@@ -25,9 +33,12 @@ function Timer({ startDate, completedDate, countDownTime }) {
       let seconds = Math.floor(elapsedSeconds) % 60;
       let days = Math.floor(elapsedHours / 24);
 
-      return days > 0
-        ? `${days} days ${hours}:${minutes}:${seconds}`
-        : `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      return {
+        days,
+        hours,
+        minutes,
+        seconds
+      };
     };
 
     const computeTimeLeft = () => {
@@ -48,15 +59,6 @@ function Timer({ startDate, completedDate, countDownTime }) {
       const now = new Date().getTime();
       const remainingTime = start + countDownTime * 60 * 1000 - now;
 
-      if (remainingTime < 0) {
-        return {
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        };
-      }
-
       return {
         days: Math.floor(remainingTime / (1000 * 60 * 60 * 24)),
         hours: Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
@@ -66,20 +68,16 @@ function Timer({ startDate, completedDate, countDownTime }) {
     };
 
     if (countDownTime) {
-      setTimeLeft(computeTimeLeft())
+      setTimeLeft(computeTimeLeft());
     }
-
-    setElapsedTime(computeElapsedTime());
-
 
     if (startDate) {
       intervalId = setInterval(() => setElapsedTime(computeElapsedTime()), 1000);
     }
 
-    if (countDownTime && startDate ) {
+    if (countDownTime && startDate && !completedDate) {
       intervalId2 = setInterval(() => setTimeLeft(computeTimeLeft()), 1000);
     }
-
 
     return () => {
       clearInterval(intervalId);
@@ -87,14 +85,23 @@ function Timer({ startDate, completedDate, countDownTime }) {
     };
   }, [startDate, completedDate, countDownTime]);
 
+  const renderTime = (time, text) => {
+    return `${time.days > 0 ? `${time.days}d ` : ''}${time.hours > 0 ? `${time.hours}h ` : ''}${time.minutes > 0 ? `${time.minutes}m ` : ''}${time.seconds}s ${text}`;
+  };
 
-  const elapsedMessage = `${!completedDate ? "Elapsed time" : "Total time"} : ${elapsedTime}`;
-
-  return <div>
-    {startDate ? elapsedMessage : null}
-    {timeLeft.days} days {timeLeft.hours} hours {timeLeft.minutes} minutes {timeLeft.seconds} seconds
-
-    </div>;
+  return (
+    <div style={{ color: timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds < 0 ? 'blue' : 'inherit' }}>
+      {
+        !startDate
+          ? `Time goal: ${renderTime(timeLeft)}`
+          : completedDate
+            ? `You have done it in: ${renderTime(elapsedTime, '')}. You are: ${renderTime(timeLeft, 'from your goal.')} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds >= 0 ? 'Congratulations!' : 'Work better next time.'}`
+            : `Time remaining: ${renderTime(timeLeft, '')}. Time elapsed: ${renderTime(elapsedTime, '')}`
+      }
+    </div>
+  );
 }
 
 export default Timer;
+
+//TODO case when no time goal is set

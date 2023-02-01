@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import Timer from './Timer';
 import { animated, useSpring } from 'react-spring'
@@ -75,7 +75,7 @@ const Issue = ( issue ) => {
   return (
     <animated.div className={styles.issue}  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }} >
       {isEditing ? (
-        <Fragment>
+        <>
           <input
             type="text"
             value={editedTitle}
@@ -88,9 +88,9 @@ const Issue = ( issue ) => {
           />
           <button onClick={handleSave}>Save</button>
           <button onClick={handleCancel}>Cancel</button>
-        </Fragment>
+        </>
       ) : (
-        <Fragment>
+        <>
           <h3>{issue.title}</h3>
           <p>{issue.startDate}</p>
           <p>{issue.description}</p>
@@ -109,7 +109,7 @@ const Issue = ( issue ) => {
             </>
           )}
           <button onClick={handleDelete}>Delete</button>
-        </Fragment>
+        </>
       )}
     </animated.div>
     );
