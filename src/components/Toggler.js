@@ -8,7 +8,10 @@ const Button = styled.button`
   cursor: pointer;
   font-size:0.8rem;
   padding: 0.6rem;
-  }`;
+  margin-top: 50px;
+  margin-left: 15px;
+  }
+  `;
 
 const Toggle = ({ toggleTheme }) => {
     return (

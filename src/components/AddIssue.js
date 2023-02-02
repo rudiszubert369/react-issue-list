@@ -34,7 +34,7 @@ const AddIssue = () => {
       onClick={() => setShowForm(true)}
       aria-label="Open form to add an issue"
     >
-      +
+      ADD A NEW ISSUE
     </button>
   ) : (
     // Form to add an issue
@@ -43,10 +43,7 @@ const AddIssue = () => {
       onSubmit={handleSubmit}
       aria-label="Form to add an issue"
     >
-      <label
-        className={styles.label}
-        htmlFor="title"
-      >
+      <label className={styles.label}>
         Title:
         <input
           className={styles.input}
@@ -58,10 +55,7 @@ const AddIssue = () => {
         />
       </label>
       <br />
-      <label
-        className={styles.label}
-        htmlFor="description"
-      >
+      <label className={styles.label}>
         Description:
         <textarea
           className={styles.textarea}
@@ -72,9 +66,7 @@ const AddIssue = () => {
         />
       </label>
       <div className={styles.timeContainer}>
-        <label
-          htmlFor="days"
-        >
+        <label>
           Days:
         </label>
         <input
@@ -87,9 +79,7 @@ const AddIssue = () => {
           aria-label="Days remaining to solve the issue"
         />
         <br />
-        <label
-          htmlFor="hours"
-        >
+        <label>
           Hours:
         </label>
         <input
@@ -102,9 +92,7 @@ const AddIssue = () => {
           aria-label="Hours remaining to solve the issue"
         />
         <br />
-        <label
-          htmlFor="minutes"
-        >
+        <label>
           Minutes:
         </label>
         <input

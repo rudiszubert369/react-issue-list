@@ -4,6 +4,7 @@ import IssueContext from './IssueContext';
 import Issue from './Issue';
 import styles from './IssueList.module.scss';
 
+
 const IssueList = () => {
   const { issues } = useContext(IssueContext);
   const statuses = ['open', 'pending', 'complete'];
@@ -33,6 +34,7 @@ const IssueList = () => {
 
         return (
           <div className={styles[`${status}-issues`]} key={status}>
+            <h4>{status}</h4>
             <div className={styles.sortBy}>
               <p>Sort By:</p>
               <select
@@ -44,7 +46,6 @@ const IssueList = () => {
                 <option value="title">Name</option>
               </select>
             </div>
-            <p>{status}</p>
             {sortedIssues.map(issue => (
               <Issue key={issue.id} {...issue} />
             ))}

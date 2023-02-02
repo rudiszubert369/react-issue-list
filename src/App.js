@@ -1,8 +1,8 @@
 import { useReducer, useEffect } from 'react';
+import { initialState } from './state/state';
+import { reducer } from './state/reducer';
 import AddIssue from './components/AddIssue';
 import IssueList from './components/IssueList';
-import { initialState } from './components/state';
-import { reducer } from './components/reducer';
 import IssueContext from './components/IssueContext';
 import Layout from './components/Layout';
 
@@ -28,8 +28,8 @@ const App = () => {
   return (
     <IssueContext.Provider value={{ ...state, dispatch }}>
       <Layout>
-        <IssueList />
         <AddIssue />
+        <IssueList />
       </Layout>
     </IssueContext.Provider>
   );
