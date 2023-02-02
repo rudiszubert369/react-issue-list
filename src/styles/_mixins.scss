@@ -1,0 +1,85 @@
+@mixin animated-button {
+  display: inline-block;
+  border: 2px solid #333;
+  border-radius: 50px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: white;
+  color: #333;
+  display: block;
+  margin: 20px auto 0 auto;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: translateY(-10px);
+    border-color: #333;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@mixin animated-input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 80%;
+  animation: input-wow 0.5s forwards;
+      margin-top: 10px;
+    border: 1px solid #000;
+    font-size: 16px;
+  &:focus {
+    outline: none;
+  }
+}
+
+@mixin label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+@mixin input-animated {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 80%;
+  margin-top: 10px;
+  border: 1px solid #000;
+  font-size: 16px;
+  animation: input-wow 0.5s forwards;
+      margin-top: 10px;
+    border: 1px solid #000;
+    font-size: 16px;
+  &:focus {
+    outline: none;
+  }
+}
+
+@keyframes form-wow {
+  from {
+      transform: translateY(-50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+@keyframes input-wow {
+  from {
+      transform: scale(0);
+  }
+  to {
+      transform: scale(1);
+  }
+}

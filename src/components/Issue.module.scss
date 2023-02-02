@@ -1,39 +1,42 @@
+@import '../styles/mixins';
+
 .issue {
-    border: 1px solid #ccc;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
+  border: 1px solid #000;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+
+  h3,p {
+      margin: 0;
+      margin-bottom: 24px;
+      text-align: center;
   }
 
-  .issue h3 {
-    margin: 0;
-    margin-right: 16px;
+  button {
+    padding: 12px 20px;
+    font-size: 11px;
+    @include animated-button;
   }
 
-  .issue p {
-    margin: 0;
-    margin-right: 16px;
+  input,textarea {
+    @include input-animated
   }
 
-  .issue input {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin-right: 8px;
+  input {
+    font-weight: bold;
   }
 
-  .issue button {
-    padding: 8px;
-    border-radius: 4px;
-    border: none;
-    background-color: #4caf50;
-    color: white;
-    cursor: pointer;
-    margin-right: 8px;
+  .date {
+    font-size: 16px;
+    margin-bottom: 20px;
   }
 
-  .issue button:hover {
-    background-color: #3e8e41;
+  .description {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
   }
+}
+

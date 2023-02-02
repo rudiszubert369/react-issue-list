@@ -23,11 +23,12 @@ const IssueList = () => {
       } else if (sortBy === 'title') {
         return a.title.localeCompare(b.title);
       }
+      return issues
     });
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} id="scrollTarget">
       {statuses.map(status => {
         const filteredIssues = issues.filter(issue => issue.status === status);
         const sortedIssues = sortIssues(filteredIssues, sortBy[status]);

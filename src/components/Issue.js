@@ -20,9 +20,10 @@ const Issue = ( issue ) => {
     config: { duration: 500 },
   });
 
+  //set up colors and transition colors for issue statuses
   const colorChange = useSpring({
-    from: { backgroundColor: issue.status === 'open' ? 'green' : 'orange' },
-    to: { backgroundColor: issue.status === 'pending' ? 'orange' : 'red' },
+    from: { backgroundColor: issue.status === 'open' ? 'gray' : (issue.status === 'pending' ? '#20aa20' : 'f50000') },
+    to: { backgroundColor: issue.status === 'open' ? '#20aa20' : (issue.status === 'pending' ? '#dd1a1a' : 'gray') },
     config: { duration: 500 },
   });
 
@@ -72,43 +73,62 @@ const Issue = ( issue ) => {
     return  (issue.daysRemaining || 0) * 1440 + (issue.hoursRemaining || 0) * 60 + (issue.minutesRemaining || 0);
   }
 
+  const convertDate = dateString => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleDateString('en-US', options).replace(',', '').replace(/\//g, '-');
+  };
+
   return (
-    <animated.div className={styles.issue}  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }} >
+    <animated.div className={styles.issue}  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }}>
       {isEditing ? (
         <>
-          <input
-            type="text"
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-          />
-          <input
-            type="text"
-            value={editedDescription}
-            onChange={(e) => setEditedDescription(e.target.value)}
-          />
-          <button onClick={handleSave}>Save</button>
-          <button onClick={handleCancel}>Cancel</button>
+         <div className={styles.editInput}>
+            <form>
+              <label>
+                Title
+                <input
+                  key="title-input"
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                />
+              </label>
+              <label>
+                Description
+                <textarea
+                  type="text"
+                  key="description-input"
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
+                />
+              </label>
+              <button onClick={handleSave}>Save</button>
+              <button onClick={handleCancel}>Cancel</button>
+            </form>
+          </div>
         </>
       ) : (
         <>
-          <h3>{issue.title}</h3>
-          <p>{issue.startDate}</p>
-          <p>{issue.description}</p>
-          <p>{issue.status}</p>
-            <Timer
-              startDate={issue.pendingDate}
-              completedDate={issue.completeDate}
-              countDownTime={calcCountdownMinutes()}
-            />
-          {issue.status === 'complete' ? null : (
-            <>
-            <button onClick={handleEdit}>Edit</button>
-            <button onClick={handleStatusChange}>
-              {issue.status === 'open' ? 'Move to Pending' : 'Mark as Complete'}
-            </button>
-            </>
-          )}
-          <button onClick={handleDelete}>Delete</button>
+          <div>
+            <h3>{issue.title}</h3>
+            <p className={styles.date}>{convertDate(issue.startDate)}</p>
+            <p className={styles.description}>{issue.description}</p>
+              <Timer
+                startDate={issue.pendingDate}
+                completedDate={issue.completeDate}
+                countDownTime={calcCountdownMinutes()}
+              />
+            {issue.status === 'complete' ? null : (
+              <>
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={handleStatusChange}>
+                {issue.status === 'open' ? 'Move to Pending' : 'Mark as Complete'}
+              </button>
+              </>
+            )}
+            <button onClick={handleDelete}>Delete</button>
+          </div>
         </>
       )}
     </animated.div>

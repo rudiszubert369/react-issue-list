@@ -16,6 +16,10 @@ const AddIssue = () => {
       setIssue({ description: '', title: '', daysRemaining: '' });
       setError('');
       setShowForm(false);
+      const target = document.querySelector("#scrollTarget");
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+
     } else {
       setError('Title and description cannot be empty');
     }

@@ -1,3 +1,5 @@
+@import '../styles/mixins';
+
 .form {
   background-color: #9B9B9B;
   padding: 20px;
@@ -10,45 +12,8 @@
   margin: 0 auto;
 }
 
-@keyframes form-wow {
-  from {
-      transform: translateY(-50px);
-      opacity: 0;
-  }
-  to {
-      transform: translateY(0);
-      opacity: 1;
-  }
-}
-
 .label {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-
-}
-
-.input,
-.textarea {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  width: 80%;
-  animation: input-wow 0.5s forwards;
-}
-
-.label {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-
-
-
-
+  @include label;
   input, textarea {
     margin-top: 10px;
     border: 1px solid #000;
@@ -60,42 +25,21 @@
   }
 }
 
-@keyframes input-wow {
-  from {
-      transform: scale(0);
-  }
-  to {
-      transform: scale(1);
-  }
+.input,
+.textarea {
+  @include input-animated
 }
 
 .button {
-  display: inline-block;
   padding: 15px 30px;
-  border: 2px solid #333;
-  border-radius: 50px;
   font-size: 20px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  background-color: white;
-  color: #333;
-  display: block;
-  margin: 20px auto 0 auto;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    transform: translateY(-10px);
-    border-color: #333;
-    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.35);
-  }
+  @include animated-button;
 }
 
 .error {
-  color: red;
+  color: #940d0d;
   margin-top: 10px;
+  font-size: 20px;
   animation: error-wow 0.5s forwards;
 }
 
@@ -177,5 +121,8 @@
   }
 }
 
-
-
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -9,7 +9,6 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
     minutes: 0,
     seconds: 0,
   });
-
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -86,22 +85,31 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
   }, [startDate, completedDate, countDownTime]);
 
   const renderTime = (time, text) => {
-    return `${time.days > 0 ? `${time.days}d ` : ''}${time.hours > 0 ? `${time.hours}h ` : ''}${time.minutes > 0 ? `${time.minutes}m ` : ''}${time.seconds}s ${text}`;
+    const isNegative = time.days + time.hours + time.minutes + time.seconds < 0;
+    let displayTime = `${Math.abs(time.days)}d ${Math.abs(time.hours)}h ${Math.abs(time.minutes)}m ${Math.abs(time.seconds)}s ${text}`;
+    return isNegative ? `-${displayTime}` : displayTime;
+
+
+    // let displayTime = `${time.days > 0 ? `${time.days}d ` : ''}${time.hours > 0 ? `${time.hours}h ` : ''}${time.minutes > 0 ? `${time.minutes}m ` : ''} ${time.seconds !== 0 ? `${time.seconds}s` : ''}  ${text}`;
+    // return displayTime
   };
 
+
+
   return (
-    <div style={{ color: timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds < 0 ? 'blue' : 'inherit' }}>
-      {
+    <div>
+      <p style={{ color: timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds < 0 ? 'blue' : 'inherit' }}>
+      {countDownTime !== 0 && (
         !startDate
-          ? `Time goal: ${renderTime(timeLeft)}`
+          ? `Time goal: ${renderTime(timeLeft, '')}`
           : completedDate
             ? `You have done it in: ${renderTime(elapsedTime, '')}. You are: ${renderTime(timeLeft, 'from your goal.')} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds >= 0 ? 'Congratulations!' : 'Work better next time.'}`
-            : `Time remaining: ${renderTime(timeLeft, '')}. Time elapsed: ${renderTime(elapsedTime, '')}`
-      }
+            : `Time remaining: ${renderTime(timeLeft, '')}.`
+      )}
+      </p>
+    { startDate ? <p>Time elapsed: {renderTime(elapsedTime, '')}</p> : null}
     </div>
   );
 }
 
 export default Timer;
-
-//TODO case when no time goal is set
