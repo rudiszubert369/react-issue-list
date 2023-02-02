@@ -1,6 +1,9 @@
 import { useContext, useState } from 'react';
 import IssueContext from './IssueContext';
 import styles from './AddIssue.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
+
 
 const AddIssue = () => {
   const { dispatch, nextId } = useContext(IssueContext);
@@ -16,10 +19,9 @@ const AddIssue = () => {
       setIssue({ description: '', title: '', daysRemaining: '' });
       setError('');
       setShowForm(false);
+
       const target = document.querySelector("#scrollTarget");
       target.scrollIntoView({ behavior: "smooth", block: "start" });
-
-
     } else {
       setError('Title and description cannot be empty');
     }
@@ -31,16 +33,16 @@ const AddIssue = () => {
 
   return (
     <div className={styles.container}>
-  {!showForm ? (
-    // Button to open the form
-    <button
-      className={styles.addButton}
-      onClick={() => setShowForm(true)}
-      aria-label="Open form to add an issue"
-    >
-      ADD A NEW ISSUE
-    </button>
-  ) : (
+      {!showForm ? (
+        // Button to open the form
+        <button
+          className={styles.addButton}
+          onClick={() => setShowForm(true)}
+          aria-label="Open form to add an issue"
+        >
+          ADD A NEW ISSUE
+        </button>
+      ) : (
     // Form to add an issue
     <form
       className={styles.form}
@@ -111,7 +113,12 @@ const AddIssue = () => {
       </div>
       <br />
       {error ? <p className={styles.error} aria-label="Error message"> {error} </p> :  null}
-          <button className={styles.button} type="submit">Save</button>
+          <button className={styles.button} type="submit">
+            <FontAwesomeIcon
+              icon={faFloppyDisk}
+              style={{ fontSize: "1.5em" }}
+            />
+          </button>
         </form>)}
     </div>)
 };

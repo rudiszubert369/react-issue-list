@@ -10,6 +10,12 @@
   animation: form-wow 1s forwards;
   width: 40%;
   margin: 0 auto;
+  @media only screen and (max-width: 986px) {
+    width: 60%;
+  }
+  @media only screen and (max-width: 550px) {
+    width: 80%;
+  }
 }
 
 .label {
@@ -25,8 +31,8 @@
   }
 }
 
-.input,
-.textarea {
+input,
+textarea {
   @include input-animated
 }
 
@@ -41,17 +47,6 @@
   margin-top: 10px;
   font-size: 20px;
   animation: error-wow 0.5s forwards;
-}
-
-@keyframes error-wow {
-  from {
-      transform: translateX(-50px);
-      opacity: 0;
-  }
-  to {
-      transform: translateX(0);
-      opacity: 1;
-  }
 }
 
 .timeContainer {
@@ -76,6 +71,9 @@
     &:focus {
       outline: none;
     }
+  }
+  @media only screen and (max-width: 648px) {
+    flex-direction: column;
   }
 }
 

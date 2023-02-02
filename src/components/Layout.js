@@ -9,11 +9,22 @@ import Toggle from "./Toggler";
 const Title = styled(animated.h1)`
   font-size: 4rem;
   text-align: center;
+  @media (max-width: 600px) {
+    font-size: 3rem;
+  }
 `;
 
 const Tagline = styled(animated.h2)`
   font-size: 2em;
   text-align: center;
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const Header = styled.header`
+  max-width: 75%;
+  margin: 0 auto;
 `;
 
 const Layout = ({ children }) => {
@@ -36,11 +47,11 @@ const Layout = ({ children }) => {
   return (
       <ThemeProvider theme={themeMode}>
         <GlobalStyles />
-        <header>
+        <Header>
           <Toggle theme={theme} toggleTheme={themeToggler} />
           <Title style={titleProps}>IssueMaster</Title>
           <Tagline style={taglineProps}>Empowering productivity, one issue at a time</Tagline>
-        </header>
+        </Header>
         <main>{children}</main>
       </ThemeProvider>
   );

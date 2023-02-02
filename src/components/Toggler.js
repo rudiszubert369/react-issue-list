@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMoon } from '@fortawesome/free-regular-svg-icons';
 
 const Button = styled.button`
   background: ${({ theme }) => theme.background};
@@ -16,7 +18,10 @@ const Button = styled.button`
 const Toggle = ({ toggleTheme }) => {
     return (
         <Button onClick={toggleTheme} >
-          Switch Theme
+          <FontAwesomeIcon
+            icon={faMoon}
+            style={{ fontSize: "2em" }}
+          />
         </Button>
     );
 };

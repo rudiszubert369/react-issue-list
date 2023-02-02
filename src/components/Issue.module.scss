@@ -1,23 +1,65 @@
 @import '../styles/mixins';
 
+
 .issue {
   border: 1px solid #000;
   padding: 16px;
   margin-bottom: 16px;
   border-radius: 4px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  width: 95%;
+  animation: grow 0.5s ease-out;
+  overflow: hidden;
+
+
+  @keyframes grow {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: auto;
+    }
+  }
+
+  .compressed {
+    height: 150px;
+  }
+
+  .expanded {
+    padding:20px
+  }
+
+  h3 {
+    text-decoration: underline;
+    text-align: center;
+  }
 
   h3,p {
-      margin: 0;
-      margin-bottom: 24px;
-      text-align: center;
+    margin: 0;
+    margin-bottom: 24px;
+  }
+
+  .buttonWrapper {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .changeStatusBtn{
+    &:hover {
+      background-color: rgb(232, 124, 8);
+    }
   }
 
   button {
     padding: 12px 20px;
     font-size: 11px;
     @include animated-button;
+  }
+
+  .buttonSecondary {
+    font-size: 9px;
+    padding: 8px 16px;
   }
 
   input,textarea {
@@ -29,14 +71,13 @@
   }
 
   .date {
-    font-size: 16px;
+    font-size: 13px;
     margin-bottom: 20px;
   }
 
   .description {
     font-size: 18px;
-    text-align: center;
+    text-align: left;
     margin-bottom: 20px;
   }
 }
-

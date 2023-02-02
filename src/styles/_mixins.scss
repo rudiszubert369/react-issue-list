@@ -83,3 +83,14 @@
       transform: scale(1);
   }
 }
+
+@keyframes error-wow {
+  from {
+      transform: translateX(-50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
