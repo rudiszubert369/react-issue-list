@@ -27,16 +27,12 @@
     margin-top: 10px;
     border: 1px solid #000;
     font-size: 16px;
+    @include input-animated;
   }
 
   input {
     font-weight: bold;
   }
-}
-
-input,
-textarea {
-  @include input-animated;
 }
 
 .button {

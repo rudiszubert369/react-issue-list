@@ -100,7 +100,7 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
     const daysStr = time.days > 0 ? `${time.days}d ` : '';
     const hoursStr = time.hours > 0 ? `${time.hours}h ` : '';
     const minutesStr = time.minutes > 0 ? `${time.minutes}m ` : '';
-    const secondsStr = time.seconds !== 0 ? `${time.seconds}s` : 'None! you are past the deadline!';
+    const secondsStr = time.seconds !== 0 ? `${time.seconds}s` : '';
 
     return `${daysStr}${hoursStr}${minutesStr}${secondsStr}`;
   };

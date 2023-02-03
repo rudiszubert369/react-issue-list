@@ -16,7 +16,7 @@ const AddIssue = () => {
     if (issue.title && issue.description) {
       const currentDate = new Date();
       dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, startDate: currentDate.toString()} });
-      setIssue({ description: '', title: '', daysRemaining: '' });
+      setIssue({});
       setError('');
       setShowForm(false);
 

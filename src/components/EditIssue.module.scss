@@ -1,0 +1,21 @@
+@import '../styles/mixins';
+
+.button {
+  padding: 12px 20px;
+  font-size: 11px;
+  @include animated-button;
+
+  &.buttonSecondary {
+    font-size: 9px;
+    padding: 8px 16px;
+  }
+}
+
+.input,
+.textarea {
+  @include input-animated;
+}
+
+.input {
+  font-weight: bold;
+}
