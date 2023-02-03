@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon } from '@fortawesome/free-regular-svg-icons';
@@ -24,6 +25,10 @@ const Toggle = ({ toggleTheme }) => {
           />
         </Button>
     );
+};
+
+Toggle.propTypes = {
+  toggleTheme: PropTypes.func.isRequired
 };
 
 export default Toggle;

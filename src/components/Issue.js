@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import IssueContext from './IssueContext';
 import Timer from './Timer';
 import { animated, useSpring } from 'react-spring'
@@ -11,12 +12,6 @@ const Issue = ( issue ) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const { dispatch } = useContext(IssueContext);
-
-  const transition = useSpring({
-    from: { transform: 'translateX(-100%)' },
-    to: { transform: 'translateX(0%)' },
-    config: { duration: 500 },
-  });
 
   //set up colors and transition colors for issue statuses
   const colorChange = useSpring({
@@ -54,7 +49,7 @@ const Issue = ( issue ) => {
       payload: updatedFields
     });
   };
-
+  //TODO moze to juz niech timer robi
   const convertToMinutes  = ()  => {//converts countdown days, hours and minutes to minutes
     return (Number(issue.daysRemaining) || 0) * 1440 + (Number(issue.hoursRemaining) || 0) * 60 + (Number(issue.minutesRemaining) || 0);
   };
@@ -77,7 +72,7 @@ const Issue = ( issue ) => {
 
   const renderContent = () => {
     if (isEditing) {
-      return <EditIssue issue={issue} onStopEditing={setIsEditing} />
+      return <EditIssue issue={issue} onFinishEditing={setIsEditing} />
     }
 
     return (
@@ -105,7 +100,7 @@ const Issue = ( issue ) => {
           />
         </div>
         {issue.status !== 'complete' ? renderStatusBtn() : null}
-        <button onClick={e => setIsActive(!isActive)}  className={styles.button}>
+        <button onClick={ () => setIsActive(!isActive)}  className={styles.button}>
           <FontAwesomeIcon
             icon={isActive ? faArrowUp : faArrowDown}
             style={{ fontSize: "1.5em" }}
@@ -116,10 +111,25 @@ const Issue = ( issue ) => {
   };
 
   return (
-    <animated.div className={styles.issue} style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }}>
+    <animated.div className={styles.issue} style={{ ...fade, ...colorChange }}>
       {renderContent()}
     </animated.div>
   );
+};
+
+Issue.propTypes = {
+  issue: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    startDate: PropTypes.string.isRequired,
+    status: PropTypes.oneOf(['open', 'pending', 'complete']).isRequired,
+    daysRemaining: PropTypes.number,
+    hoursRemaining: PropTypes.number,
+    minutesRemaining: PropTypes.number,
+    pendingDate: PropTypes.string,
+    completeDate: PropTypes.string
+  }).isRequired
 };
 
 export default Issue;

@@ -27,7 +27,7 @@ const IssueList = () => {
     });
   };
 
-  return (
+  return (//creates a list for each statues array element
     <div className={styles.wrapper} id="scrollTarget">
       {statuses.map(status => {
         const filteredIssues = issues.filter(issue => issue.status === status);

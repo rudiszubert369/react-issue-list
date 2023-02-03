@@ -19,3 +19,7 @@
 .input {
   font-weight: bold;
 }
+
+.error {
+  @include error;
+}

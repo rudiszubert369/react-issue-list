@@ -42,10 +42,7 @@
 }
 
 .error {
-  color: #940d0d;
-  margin-top: 10px;
-  font-size: 20px;
-  animation: error-wow 0.5s forwards;
+  @include error;
 }
 
 .timeContainer {

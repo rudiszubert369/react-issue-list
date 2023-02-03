@@ -11,8 +11,7 @@ const AddIssue = () => {
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (issue.title && issue.description) {
       const currentDate = new Date();
       dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, startDate: currentDate.toString()} });
@@ -112,15 +111,15 @@ const AddIssue = () => {
         />
       </div>
       <br />
-      {error ? <p className={styles.error} aria-label="Error message"> {error} </p> :  null}
-          <button className={styles.button} type="submit">
-            SAVE
-            <FontAwesomeIcon
-              icon={faFloppyDisk}
-              style={{ fontSize: "1.5em" }}
-            />
-          </button>
-        </form>)}
+      {error && <p className={styles.error} aria-label="Error message"> {error} </p>}
+        <button className={styles.button} type="submit">
+          SAVE
+          <FontAwesomeIcon
+            icon={faFloppyDisk}
+            style={{ fontSize: "1.5em" }}
+          />
+        </button>
+       </form>)}
     </div>)
 };
 

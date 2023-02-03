@@ -1,4 +1,5 @@
 import { useSpring, animated } from 'react-spring';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../styles/Theme";
@@ -55,6 +56,10 @@ const Layout = ({ children }) => {
         <main>{children}</main>
       </ThemeProvider>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default Layout;

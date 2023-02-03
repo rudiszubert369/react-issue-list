@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import PropTypes from 'prop-types';
 
 
 const Timer = ({ startDate, completedDate, countDownTime }) => {
@@ -130,5 +130,12 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
     </div>
   );
 }
+
+Timer.propTypes = {
+  startDate: PropTypes.string,
+  completedDate: PropTypes.string,
+  countDownTime: PropTypes.number
+};
+
 
 export default Timer;
