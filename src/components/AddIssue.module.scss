@@ -10,9 +10,11 @@
   animation: form-wow 1s forwards;
   width: 40%;
   margin: 0 auto;
+
   @media only screen and (max-width: 986px) {
     width: 60%;
   }
+
   @media only screen and (max-width: 550px) {
     width: 80%;
   }
@@ -20,6 +22,7 @@
 
 .label {
   @include label;
+
   input, textarea {
     margin-top: 10px;
     border: 1px solid #000;
@@ -33,7 +36,7 @@
 
 input,
 textarea {
-  @include input-animated
+  @include input-animated;
 }
 
 .button {
@@ -54,11 +57,13 @@ textarea {
   justify-content: space-between;
   align-items: center;
   margin-top: 40px;
+
   & > label {
     font-size: 18px;
     font-weight: bold;
     text-transform: uppercase;
   }
+
   & > input[type="number"] {
     width: 50px;
     height: 50px;
@@ -68,14 +73,17 @@ textarea {
     color: #000;
     font-weight: bold;
     padding: 0;
+
     &:focus {
       outline: none;
     }
   }
+
   @media only screen and (max-width: 648px) {
     flex-direction: column;
   }
 }
+
 
 .addButton {
   position: relative;

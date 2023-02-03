@@ -53,31 +53,33 @@ const Issue = ( issue ) => {
   };
 
   const handleStatusChange = () => {
-    const newStatus = issue.status === "open" ? 'pending' : 'complete';
     const date = new Date().toString();
+    const newStatus = issue.status === "open" ? 'pending' : 'complete';
+    const updatedFields = { ...issue, status: newStatus };
+
+    if (newStatus === 'pending') {
+      updatedFields.pendingDate = date;
+    } else if (newStatus === 'complete') {
+      updatedFields.completeDate = date;
+    }
 
     dispatch({
       type: 'UPDATE_ISSUE',
-      payload: {
-        ...issue,
-        status: newStatus,
-        ...(newStatus === 'pending' ? { pendingDate: date } : {}),
-        ...(newStatus === 'complete' ? { completeDate: date } : {})
-      }
+      payload: updatedFields
     });
   };
 
-  const calcCountdownMinutes  = ()  => {
+  const convertToMinutes  = ()  => {//converts countdown days, hours and minutes to minutes
     return  (issue.daysRemaining || 0) * 1440 + (issue.hoursRemaining || 0) * 60 + (issue.minutesRemaining || 0);
   }
 
-  const convertDate = dateString => {
+  const convertDate = dateString => {//converts date to displayable format
     const date = new Date(dateString);
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
     return date.toLocaleDateString('en-US', options).replace(',', '').replace(/\//g, '-');
   };
 
-  const renderStatusBtn = () => (
+  const renderStatusBtn = () => ( //renders button to change issue status
       <button onClick={handleStatusChange} className={styles.changeStatusBtn}>
         {issue.status === 'open' ? 'Move to Pending' : 'Mark as Complete'}
         <FontAwesomeIcon
@@ -87,86 +89,89 @@ const Issue = ( issue ) => {
       </button>
   )
 
-  return (
-    <animated.div className={styles.issue}  style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }}>
-      {isEditing ? (
-        <>
-         <div className={styles.editInput}>
-            <form>
-              <label>
-                Title
-                <input
-                  key="title-input"
-                  type="text"
-                  value={editedTitle}
-                  onChange={ e => setEditedTitle(e.target.value)}
-                />
-              </label>
-              <label>
-                Description
-                <textarea
-                  type="text"
-                  key="description-input"
-                  value={editedDescription}
-                  onChange={ e => setEditedDescription(e.target.value)}
-                />
-              </label>
-              <button onClick={handleSave}>
-               <FontAwesomeIcon
-                  icon={faFloppyDisk}
-                  style={{ fontSize: "1.5em" }}
-                />
-              </button>
-              <button onClick={handleCancel}>Cancel</button>
-            </form>
-          </div>
-        </>
-      ) : (
-        isActive ? (
-          <>
-          <div className={styles.expanded}>
-            <p className={styles.date}>Date added: {convertDate(issue.startDate)}</p>
-            <h3>{issue.title}</h3>
-            <p className={styles.description}>{issue.description}</p>
+  const renderContent = () => {
+    if (isEditing) {
+      return (
+        <div className={styles.editInput}>
+          <form>
+            <label>
+              Title
+              <input
+                className={styles.input}
+                key="title-input"
+                type="text"
+                value={editedTitle}
+                onChange={e => setEditedTitle(e.target.value)}
+              />
+            </label>
+            <label>
+              Description
+              <textarea
+                className={styles.textarea}
+                type="text"
+                key="description-input"
+                value={editedDescription}
+                onChange={e => setEditedDescription(e.target.value)}
+              />
+            </label>
+            <button onClick={handleSave}>
+              <FontAwesomeIcon
+                icon={faFloppyDisk}
+                style={{ fontSize: "1.5em" }}
+              />
+            </button>
+            <button onClick={handleCancel}>Cancel</button>
+          </form>
+        </div>
+      );
+    }
 
-            <div className={ styles.buttonWrapper}>
-              <button onClick={handleEdit}>Edit</button>
-              <button onClick={handleDelete}>
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  style={{ fontSize: "1.5em" }}
-                />
-              </button>
-            </div>
-            <Timer
-              startDate={issue.pendingDate}
-              completedDate={issue.completeDate}
-              countDownTime={calcCountdownMinutes()}
+    return isActive ? (
+      <div className={styles.expanded}>
+        <p className={styles.date}>Date added: {convertDate(issue.startDate)}</p>
+        <h3>{issue.title}</h3>
+        <p className={styles.description}>{issue.description}</p>
+        <div className={styles.buttonWrapper}>
+          <button onClick={handleEdit}>Edit</button>
+          <button onClick={handleDelete}>
+            <FontAwesomeIcon
+              icon={faTrash}
+              style={{ fontSize: "1.5em" }}
             />
-            {issue.status !== 'complete' ? renderStatusBtn() : null}
-            <button onClick={ e => setIsActive(false)} className={styles.buttonSecondary}>
-              <FontAwesomeIcon
-                icon={faArrowUp}
-                style={{ fontSize: "1.5em" }}
-              />
-            </button>
-          </div>
-        </>
-        ) : (
-          <div className={styles.compressed}>
-            <h3>{issue.title}</h3>
-            {issue.status !== 'complete' ? renderStatusBtn() : null}
-            <button onClick={e => setIsActive(true)}>
-              <FontAwesomeIcon
-                icon={faArrowDown}
-                style={{ fontSize: "1.5em" }}
-              />
-            </button>
-          </div>
-        )
-      )}
-    </animated.div>
+          </button>
+        </div>
+        <Timer
+          startDate={issue.pendingDate}
+          completedDate={issue.completeDate}
+          countDownTime={convertToMinutes()}
+        />
+        {issue.status !== 'complete' ? renderStatusBtn() : null}
+        <button onClick={e => setIsActive(false)} className={styles.buttonSecondary}>
+          <FontAwesomeIcon
+            icon={faArrowUp}
+            style={{ fontSize: "1.5em" }}
+          />
+        </button>
+      </div>
+    ) : (
+      <div className={styles.compressed}>
+        <h3>{issue.title}</h3>
+        {issue.status !== 'complete' ? renderStatusBtn() : null}
+        <button onClick={e => setIsActive(true)}>
+          <FontAwesomeIcon
+            icon={faArrowDown}
+            style={{ fontSize: "1.5em" }}
+          />
+        </button>
+      </div>
     );
+  };
+
+  return (
+    <animated.div className={styles.issue} style={{ ...fade, ...(isEditing ? transition : {}), ...colorChange }}>
+      {renderContent()}
+    </animated.div>
+  );
 };
 
 export default Issue;

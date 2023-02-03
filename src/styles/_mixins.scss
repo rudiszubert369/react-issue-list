@@ -20,20 +20,6 @@
   }
 }
 
-@mixin animated-input {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  width: 80%;
-  animation: input-wow 0.5s forwards;
-      margin-top: 10px;
-    border: 1px solid #000;
-    font-size: 16px;
-  &:focus {
-    outline: none;
-  }
-}
-
 @mixin label {
   font-size: 18px;
   font-weight: bold;
@@ -51,8 +37,9 @@
   padding: 10px;
   border-radius: 5px;
   border: none;
-  width: 80%;
+  width: 85%;
   margin-top: 10px;
+  margin-bottom: 10px;
   border: 1px solid #000;
   font-size: 16px;
   animation: input-wow 0.5s forwards;

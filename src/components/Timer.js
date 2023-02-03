@@ -17,10 +17,10 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
   });
 
   useEffect(() => {
-    let intervalId = null;
-    let intervalId2 = null;
+    let intervalId;
+    let intervalId2;
 
-    const computeElapsedTime = () => {
+    const computeElapsedTime = () => {//calculates time from moving issue into pending
       const start = new Date(startDate);
       const elapsed = completedDate ? new Date(completedDate) - start : new Date() - start;
       const elapsedSeconds = elapsed / 1000;
@@ -40,7 +40,7 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
       };
     };
 
-    const computeTimeLeft = () => {
+    const computeTimeLeft = () => {//calculates time left between issue moved to pending date and time goal
       if (!startDate) {
         const days = Math.floor(countDownTime / (60 * 24));
         const hours = Math.floor((countDownTime % (60 * 24)) / 60);
@@ -58,6 +58,16 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
       const now = new Date().getTime();
       const remainingTime = start + countDownTime * 60 * 1000 - now;
 
+      if (remainingTime <= 0) {
+        clearInterval(intervalId2);
+        return {
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        };
+      }
+
       return {
         days: Math.floor(remainingTime / (1000 * 60 * 60 * 24)),
         hours: Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
@@ -70,10 +80,12 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
       setTimeLeft(computeTimeLeft());
     }
 
+    //start to measure elapsed time if issue is in pending
     if (startDate) {
       intervalId = setInterval(() => setElapsedTime(computeElapsedTime()), 1000);
     }
 
+    //Start the countdown only if the countdown is specified and issue is in pending
     if (countDownTime && startDate && !completedDate) {
       intervalId2 = setInterval(() => setTimeLeft(computeTimeLeft()), 1000);
     }
@@ -84,30 +96,37 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
     };
   }, [startDate, completedDate, countDownTime]);
 
-  const renderTime = (time, text) => {
-    const isNegative = time.days + time.hours + time.minutes + time.seconds < 0;
-    let displayTime = `${Math.abs(time.days)}d ${Math.abs(time.hours)}h ${Math.abs(time.minutes)}m ${Math.abs(time.seconds)}s ${text}`;
-    return isNegative ? `-${displayTime}` : displayTime;
+  const renderTime = (time) => {
+    const daysStr = time.days > 0 ? `${time.days}d ` : '';
+    const hoursStr = time.hours > 0 ? `${time.hours}h ` : '';
+    const minutesStr = time.minutes > 0 ? `${time.minutes}m ` : '';
+    const secondsStr = time.seconds !== 0 ? `${time.seconds}s` : 'None! you are past the deadline!';
 
-
-    // let displayTime = `${time.days > 0 ? `${time.days}d ` : ''}${time.hours > 0 ? `${time.hours}h ` : ''}${time.minutes > 0 ? `${time.minutes}m ` : ''} ${time.seconds !== 0 ? `${time.seconds}s` : ''}  ${text}`;
-    // return displayTime
+    return `${daysStr}${hoursStr}${minutesStr}${secondsStr}`;
   };
 
+  const renderCountdown = () => {
+    if (!startDate) {
+      return <p>Time goal: {renderTime(timeLeft)}</p>
+    }
 
+    if (startDate && !completedDate) {
+      return <p>Time remaining: {renderTime(timeLeft)}</p>
+    }
+
+    if (completedDate) {
+      return <p>You have {timeLeft ? 'made it in time, congratulations!' : 'not made it in time. Plan better next time.'}</p>
+    }
+  }
+
+  const renderElapsedTime = () => {
+    return completedDate ? <p>You have done it in: {renderTime(elapsedTime)}</p> :  <p>Time elapsed: {renderTime(elapsedTime)}</p>
+  }
 
   return (
     <div>
-      <p style={{ color: timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds < 0 ? 'blue' : 'inherit' }}>
-      {countDownTime !== 0 && (
-        !startDate
-          ? `Time goal: ${renderTime(timeLeft, '')}`
-          : completedDate
-            ? `You have done it in: ${renderTime(elapsedTime, '')}. You are: ${renderTime(timeLeft, 'from your goal.')} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds >= 0 ? 'Congratulations!' : 'Work better next time.'}`
-            : `Time remaining: ${renderTime(timeLeft, '')}.`
-      )}
-      </p>
-    { startDate ? <p>Time elapsed: {renderTime(elapsedTime, '')}</p> : null}
+    { countDownTime ? renderCountdown() : null }
+    { startDate ? renderElapsedTime() : null}
     </div>
   );
 }

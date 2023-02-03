@@ -114,6 +114,7 @@ const AddIssue = () => {
       <br />
       {error ? <p className={styles.error} aria-label="Error message"> {error} </p> :  null}
           <button className={styles.button} type="submit">
+            SAVE
             <FontAwesomeIcon
               icon={faFloppyDisk}
               style={{ fontSize: "1.5em" }}

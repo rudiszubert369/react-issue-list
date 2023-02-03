@@ -35,7 +35,7 @@ const IssueList = () => {
 
         return (
           <div className={styles[`${status}-issues`]} key={status}>
-            <h4>{status}</h4>
+            <h4>{status} ({filteredIssues.length})</h4>
             <div className={styles.sortBy}>
               <p>Sort By:</p>
               <select
