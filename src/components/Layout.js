@@ -1,5 +1,5 @@
 import { useSpring, animated } from 'react-spring';
-import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../styles/Theme";
@@ -30,36 +30,37 @@ const Header = styled.header`
 
 const Layout = ({ children }) => {
   const [theme, themeToggler] = useDarkMode();
-
   const themeMode = theme === 'light' ? lightTheme : darkTheme;
 
-  const titleProps = useSpring({
+  const titleAnimation = useSpring({
     from: { opacity: 0, transform: 'translate3d(0,-40px,0)' },
     to: { opacity: 1, transform: 'translate3d(0,0,0)' },
     delay: 500,
   });
 
-  const taglineProps = useSpring({
+  const taglineAnimation = useSpring({
     from: { opacity: 0, transform: 'translate3d(0,-40px,0)' },
     to: { opacity: 1, transform: 'translate3d(0,0,0)' },
     delay: 1000,
   });
-
   return (
       <ThemeProvider theme={themeMode}>
+        <Helmet>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap" rel="stylesheet" />
+        <meta name="description"
+          content="IssueMaster - An application for creating and managing issues to increase productivity and get things done. Empower yourself to achieve your goals with ease."
+        />
+        <title>IssueMaster</title>
+        </Helmet>
         <GlobalStyles />
         <Header>
           <Toggle theme={theme} toggleTheme={themeToggler} />
-          <Title style={titleProps}>IssueMaster</Title>
-          <Tagline style={taglineProps}>Empowering productivity, one issue at a time</Tagline>
+          <Title style={titleAnimation}>IssueMaster</Title>
+          <Tagline style={taglineAnimation}>Empowering productivity, one issue at a time</Tagline>
         </Header>
         <main>{children}</main>
       </ThemeProvider>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired
 };
 
 export default Layout;

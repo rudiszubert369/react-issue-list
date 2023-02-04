@@ -9,8 +9,9 @@ import Layout from './components/Layout';
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  //checks if there is app state in localStorage
   useEffect(() => {
-    const storedState = localStorage.getItem('myState');
+    const storedState = localStorage.getItem('IssueMasterState');
     if (storedState) {
       dispatch({
         type: 'SET_STORED_STATE',
@@ -20,8 +21,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (state.nextId !== 1) { //doesn't save to localStorage if initial state is used
-      localStorage.setItem('myState', JSON.stringify(state));
+    if (state.nextId !== 1) {//doesn't save to localStorage if initial state is used
+      localStorage.setItem('IssueMasterState', JSON.stringify(state));
     }
   }, [state]);
 

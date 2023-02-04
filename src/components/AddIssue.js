@@ -8,14 +8,24 @@ import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 const AddIssue = () => {
   const { dispatch, nextId } = useContext(IssueContext);
   const [issue, setIssue] = useState({});
+  const [countDownTime, setCountDownTime] = useState({});
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = e => {
+    e.preventDefault();
     if (issue.title && issue.description) {
       const currentDate = new Date();
-      dispatch({ type: 'ADD_ISSUE', payload: {...issue, id: nextId, startDate: currentDate.toString()} });
+      const newIssue = {
+        ...issue,
+        id: nextId,
+        addDate: currentDate.toString(),
+        countDownTime: countDownToMinutes()
+      };
+
+      dispatch({ type: 'ADD_ISSUE', payload: newIssue });
       setIssue({});
+      setCountDownTime({});
       setError('');
       setShowForm(false);
 
@@ -30,10 +40,18 @@ const AddIssue = () => {
     setIssue({ ...issue, [e.target.name]: e.target.value });
   };
 
+  const handleTimeChange = e => {
+    setCountDownTime({ ...countDownTime, [e.target.name]: e.target.value });
+  };
+
+  //converts total minutes from countdown days, hours and minutes
+  const countDownToMinutes  = ()  => {
+    return (Number(countDownTime.days) || 0) * 1440 + (Number(countDownTime.hours) || 0) * 60 + (Number(countDownTime.minutes) || 0);
+  };
+
   return (
     <div className={styles.container}>
       {!showForm ? (
-        // Button to open the form
         <button
           className={styles.addButton}
           onClick={() => setShowForm(true)}
@@ -42,7 +60,6 @@ const AddIssue = () => {
           ADD A NEW ISSUE
         </button>
       ) : (
-    // Form to add an issue
     <form
       className={styles.form}
       onSubmit={handleSubmit}
@@ -76,11 +93,10 @@ const AddIssue = () => {
         </label>
         <input
           type="number"
-          id="days"
-          name="daysRemaining"
+          name="days"
           min="0"
-          value={issue.daysRemaining || ''}
-          onChange={handleChange}
+          value={countDownTime.days || ''}
+          onChange={handleTimeChange}
           aria-label="Days remaining to solve the issue"
         />
         <br />
@@ -89,11 +105,10 @@ const AddIssue = () => {
         </label>
         <input
           type="number"
-          id="hours"
-          name="hoursRemaining"
+          name="hours"
           min="0"
-          value={issue.hoursRemaining || ''}
-          onChange={handleChange}
+          value={countDownTime.hours || ''}
+          onChange={handleTimeChange}
           aria-label="Hours remaining to solve the issue"
         />
         <br />
@@ -102,18 +117,17 @@ const AddIssue = () => {
         </label>
         <input
           type="number"
-          id="minutes"
-          name="minutesRemaining"
+          name="minutes"
           min="0"
-          value={issue.minutesRemaining || ''}
-          onChange={handleChange}
+          value={countDownTime.minutes || ''}
+          onChange={handleTimeChange}
           aria-label="Minutes remaining to solve the issue"
         />
       </div>
       <br />
       {error && <p className={styles.error} aria-label="Error message"> {error} </p>}
         <button className={styles.button} type="submit">
-          SAVE
+          SAVE&nbsp;
           <FontAwesomeIcon
             icon={faFloppyDisk}
             style={{ fontSize: "1.5em" }}

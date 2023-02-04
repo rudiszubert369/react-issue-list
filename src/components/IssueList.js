@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import IssueContext from './IssueContext';
 import Issue from './Issue';
 import styles from './IssueList.module.scss';
@@ -7,19 +6,21 @@ import styles from './IssueList.module.scss';
 
 const IssueList = () => {
   const { issues } = useContext(IssueContext);
-  const statuses = ['open', 'pending', 'complete'];
+
+  //initial sorting property for each column
   const [sortBy, setSortBy] = useState({
-    open: 'oldest',
-    pending: 'oldest',
-    complete: 'oldest',
+    open: 'newest',
+    pending: 'newest',
+    complete: 'newest',
   });
+  const columns = ['open', 'pending', 'complete'];
 
   const sortIssues = (issues, sortBy) => {
     return [...issues].sort((a, b) => {
       if (sortBy === 'oldest') {
-        return new Date(a.startDate) - new Date(b.startDate);
+        return new Date(a.addDate) - new Date(b.addDate);
       } else if (sortBy === 'newest') {
-        return new Date(b.startDate) - new Date(a.startDate);
+        return new Date(b.addDate) - new Date(a.addDate);
       } else if (sortBy === 'title') {
         return a.title.localeCompare(b.title);
       }
@@ -29,7 +30,7 @@ const IssueList = () => {
 
   return (//creates a list for each statues array element
     <div className={styles.wrapper} id="scrollTarget">
-      {statuses.map(status => {
+      {columns.map(status => {
         const filteredIssues = issues.filter(issue => issue.status === status);
         const sortedIssues = sortIssues(filteredIssues, sortBy[status]);
 

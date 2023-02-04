@@ -1,24 +1,24 @@
 import { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import IssueContext from './IssueContext';
 import styles from './EditIssue.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
-const EditIssue = ({ issue, onFinishEditing }) => {
+const EditIssue = ({ issue, toggleEditing }) => {
   const [editedTitle, setEditedTitle] = useState(issue.title);
   const [editedDescription, setEditedDescription] = useState(issue.description);
   const { dispatch } = useContext(IssueContext);
   const [error, setError] = useState('');
 
-  const handleSave = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+
     if (editedTitle && editedDescription) {
       dispatch({
         type: 'UPDATE_ISSUE',
-        payload: { ...issue, title: editedTitle, description: editedDescription },
+        payload: { ...issue, title: editedTitle, description: editedDescription }
       });
-      onFinishEditing(false);
+      toggleEditing(false);
       setError('');
     } else {
       setError('Title and description cannot be empty');
@@ -26,7 +26,7 @@ const EditIssue = ({ issue, onFinishEditing }) => {
   };
 
   const handleCancel = () => {
-    onFinishEditing(false);
+    toggleEditing(false);
     setEditedTitle(issue.title);
     setEditedDescription(issue.description);
   };
@@ -55,7 +55,7 @@ const EditIssue = ({ issue, onFinishEditing }) => {
           />
         </label>
         {error && <p className={styles.error} aria-label="Error message">{error}</p>}
-        <button onClick={handleSave} className={styles.button}>
+        <button onClick={handleSubmit} className={styles.button}>
           <FontAwesomeIcon icon={faFloppyDisk} style={{ fontSize: '1.5em' }} />
         </button>
         <button onClick={handleCancel} className={styles.button}>
@@ -64,14 +64,6 @@ const EditIssue = ({ issue, onFinishEditing }) => {
       </form>
     </div>
   );
-};
-
-EditIssue.propTypes = {
-  issue: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  }).isRequired,
-  onFinishEditing: PropTypes.func.isRequired
 };
 
 export default EditIssue;

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import styles from './Timer.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock } from '@fortawesome/free-solid-svg-icons';
 
-
-const Timer = ({ startDate, completedDate, countDownTime }) => {
+const Timer = ({ pendingDate, completedDate, countDownTime }) => {
   const [elapsedTime, setElapsedTime] = useState({
     days: 0,
     hours: 0,
@@ -20,8 +21,9 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
     let intervalId;
     let intervalId2;
 
-    const computeElapsedTime = () => {//calculates time from moving issue into pending
-      const start = new Date(startDate);
+    //calculates time from setting issue status to pending
+    const computeElapsedTime = () => {
+      const start = new Date(pendingDate);
       const elapsed = completedDate ? new Date(completedDate) - start : new Date() - start;
       const elapsedSeconds = elapsed / 1000;
       const elapsedMinutes = elapsedSeconds / 60;
@@ -40,8 +42,9 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
       };
     };
 
-    const computeTimeLeft = () => {//calculates time left between issue moved to pending date and time goal
-      if (!startDate) {
+    //calculates time left between issue moved to pending date and time goal
+    const computeTimeLeft = () => {
+      if (!pendingDate) {
         const days = Math.floor(countDownTime / (60 * 24));
         const hours = Math.floor((countDownTime % (60 * 24)) / 60);
         const minutes = countDownTime % 60;
@@ -54,7 +57,7 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
         };
       }
 
-      const start = new Date(startDate).getTime();
+      const start = new Date(pendingDate).getTime();
       const now = new Date().getTime();
       const remainingTime = start + countDownTime * 60 * 1000 - now;
 
@@ -76,17 +79,18 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
       };
     };
 
+    //initial display of countdown time
     if (countDownTime) {
       setTimeLeft(computeTimeLeft());
     }
 
     //start to measure elapsed time if issue is in pending
-    if (startDate) {
+    if (pendingDate) {
       intervalId = setInterval(() => setElapsedTime(computeElapsedTime()), 1000);
     }
 
     //Start the countdown only if the countdown is specified and issue is in pending
-    if (countDownTime && startDate && !completedDate) {
+    if (countDownTime && pendingDate && !completedDate) {
       intervalId2 = setInterval(() => setTimeLeft(computeTimeLeft()), 1000);
     }
 
@@ -94,8 +98,9 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
       clearInterval(intervalId);
       clearInterval(intervalId2);
     };
-  }, [startDate, completedDate, countDownTime]);
+  }, [pendingDate, completedDate, countDownTime]);
 
+  //converts time object into readable string
   const renderTime = (time) => {
     const daysStr = time.days > 0 ? `${time.days}d ` : '';
     const hoursStr = time.hours > 0 ? `${time.hours}h ` : '';
@@ -105,37 +110,34 @@ const Timer = ({ startDate, completedDate, countDownTime }) => {
     return `${daysStr}${hoursStr}${minutesStr}${secondsStr}`;
   };
 
-  const renderCountdown = () => {
-    if (!startDate) {
+  const renderCountdownMsg = () => {
+    if (!pendingDate) {
       return <p>Time goal: {renderTime(timeLeft)}</p>
     }
 
-    if (startDate && !completedDate) {
+    if (pendingDate && !completedDate) {
       return <p>Time remaining: {renderTime(timeLeft)}</p>
     }
 
     if (completedDate) {
-      return <p>You have {timeLeft ? 'made it in time, congratulations!' : 'not made it in time. Plan better next time.'}</p>
+      return <p><b>You have {timeLeft ? 'made it in time, congratulations!' : 'not made it in time. Plan better next time.'}</b></p>
     }
-  }
+  };
 
-  const renderElapsedTime = () => {
+  const renderElapsedTimeMsg = () => {
     return completedDate ? <p>You have done it in: {renderTime(elapsedTime)}</p> :  <p>Time elapsed: {renderTime(elapsedTime)}</p>
-  }
+  };
 
   return (
-    <div>
-    { countDownTime ? renderCountdown() : null }
-    { startDate ? renderElapsedTime() : null}
+    <div className={styles.timer}>
+    { countDownTime ? renderCountdownMsg() : null }
+    <FontAwesomeIcon
+      icon={ faClock }
+      style={{ fontSize: "1.5em" }}
+    />
+    { pendingDate ? renderElapsedTimeMsg() : null}
     </div>
   );
 }
-
-Timer.propTypes = {
-  startDate: PropTypes.string,
-  completedDate: PropTypes.string,
-  countDownTime: PropTypes.number
-};
-
 
 export default Timer;

@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import IssueContext from './IssueContext';
 import Timer from './Timer';
 import { animated, useSpring } from 'react-spring'
@@ -33,11 +32,13 @@ const Issue = ( issue ) => {
     dispatch({ type: 'DELETE_ISSUE', payload: issue.id });
   };
 
+  //Updates issue if status change button clicked
   const handleStatusChange = () => {
     const date = new Date().toString();
     const newStatus = issue.status === "open" ? 'pending' : 'complete';
     const updatedFields = { ...issue, status: newStatus };
 
+    //adds pending/complete date property depending on the new issue status
     if (newStatus === 'pending') {
       updatedFields.pendingDate = date;
     } else if (newStatus === 'complete') {
@@ -49,18 +50,16 @@ const Issue = ( issue ) => {
       payload: updatedFields
     });
   };
-  //TODO moze to juz niech timer robi
-  const convertToMinutes  = ()  => {//converts countdown days, hours and minutes to minutes
-    return (Number(issue.daysRemaining) || 0) * 1440 + (Number(issue.hoursRemaining) || 0) * 60 + (Number(issue.minutesRemaining) || 0);
-  };
 
-  const convertDate = dateString => {//converts date to displayable format
+  //converts date to displayable format
+  const convertDate = dateString => {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
     return date.toLocaleDateString('en-US', options).replace(',', '').replace(/\//g, '-');
   };
 
-  const renderStatusBtn = () => ( //renders button to change issue status
+  //renders button to change issue status
+  const renderStatusBtn = () => (
       <button onClick={handleStatusChange} className={`${styles.changeStatusBtn} ${styles.button}`}>
         {issue.status === 'open' ? 'Move to Pending' : 'Mark as Complete'}
         <FontAwesomeIcon
@@ -72,12 +71,12 @@ const Issue = ( issue ) => {
 
   const renderContent = () => {
     if (isEditing) {
-      return <EditIssue issue={issue} onFinishEditing={setIsEditing} />
+      return <EditIssue issue={issue} toggleEditing={setIsEditing} />
     }
 
     return (
       <div className={styles.issueContainer}>
-        <p className={styles.date}>Date added: {convertDate(issue.startDate)}</p>
+        <p className={styles.date}>Date added: {convertDate(issue.addDate)}</p>
         <h3>{issue.title}</h3>
         <div className={`${styles.content} ${isActive ? styles.contentExpanded : styles.contentCollapsed}`}>
           <p className={styles.description}>{issue.description}</p>
@@ -94,9 +93,9 @@ const Issue = ( issue ) => {
             </button>
           </div>
           <Timer
-            startDate={issue.pendingDate}
+            pendingDate={issue.pendingDate}
             completedDate={issue.completeDate}
-            countDownTime={convertToMinutes()}
+            countDownTime={issue.countDownTime}
           />
         </div>
         {issue.status !== 'complete' ? renderStatusBtn() : null}
@@ -115,21 +114,6 @@ const Issue = ( issue ) => {
       {renderContent()}
     </animated.div>
   );
-};
-
-Issue.propTypes = {
-  issue: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    status: PropTypes.oneOf(['open', 'pending', 'complete']).isRequired,
-    daysRemaining: PropTypes.number,
-    hoursRemaining: PropTypes.number,
-    minutesRemaining: PropTypes.number,
-    pendingDate: PropTypes.string,
-    completeDate: PropTypes.string
-  }).isRequired
 };
 
 export default Issue;
