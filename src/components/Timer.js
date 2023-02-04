@@ -128,14 +128,13 @@ const Timer = ({ pendingDate, completedDate, countDownTime }) => {
     return completedDate ? <p>You have done it in: {renderTime(elapsedTime)}</p> :  <p>Time elapsed: {renderTime(elapsedTime)}</p>
   };
 
+  const icon = countDownTime || pendingDate ? <FontAwesomeIcon icon={ faClock } style={{ fontSize: "1.5em" }} /> : null
+
   return (
     <div className={styles.timer}>
-    { countDownTime ? renderCountdownMsg() : null }
-    <FontAwesomeIcon
-      icon={ faClock }
-      style={{ fontSize: "1.5em" }}
-    />
-    { pendingDate ? renderElapsedTimeMsg() : null}
+      { countDownTime ? renderCountdownMsg() : null }
+      { icon }
+      { pendingDate ? renderElapsedTimeMsg() : null}
     </div>
   );
 }

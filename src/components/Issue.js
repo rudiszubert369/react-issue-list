@@ -76,10 +76,10 @@ const Issue = ( issue ) => {
 
     return (
       <div className={styles.issueContainer}>
-        <p className={styles.date}>Date added: {convertDate(issue.addDate)}</p>
+        <p className={`${styles.date} ${styles.p}`}>Date added: {convertDate(issue.addDate)}</p>
         <h3>{issue.title}</h3>
         <div className={`${styles.content} ${isActive ? styles.contentExpanded : styles.contentCollapsed}`}>
-          <p className={styles.description}>{issue.description}</p>
+          <p className={`${styles.description} ${styles.p}`}>{issue.description}</p>
           <div className={styles.buttonWrapper}>
             <button onClick={handleEdit} className={styles.button}>Edit</button>
             <button
