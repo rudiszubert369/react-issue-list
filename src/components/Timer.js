@@ -4,7 +4,7 @@ import styles from './Timer.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 
-const Timer = ({ pendingDate, completedDate, countDownTime }) => {
+const Timer = ({ pendingDate, completedDate, countDownTime, status }) => {
   const [elapsedTime, setElapsedTime] = useState({
     days: 0,
     hours: 0,
@@ -85,21 +85,19 @@ const Timer = ({ pendingDate, completedDate, countDownTime }) => {
       setTimeLeft(computeTimeLeft());
     }
 
-    //start to measure elapsed time if issue is in pending
-    if (pendingDate) {
-      intervalId = setInterval(() => setElapsedTime(computeElapsedTime()), 1000);
-    }
+    if ( status !== 'open') {
+      intervalId = setInterval(() => setElapsedTime(computeElapsedTime()), 1000);//starts to measure elapsed time
 
-    //Start the countdown only if the countdown is specified and issue is in pending
-    if (countDownTime && pendingDate && !completedDate) {
-      intervalId2 = setInterval(() => setTimeLeft(computeTimeLeft()), 1000);
+      if (countDownTime) {
+        intervalId2 = setInterval(() => setTimeLeft(computeTimeLeft()), 1000);//starts countdown
+      }
     }
 
     return () => {
       clearInterval(intervalId);
       clearInterval(intervalId2);
     };
-  }, [pendingDate, completedDate, countDownTime]);
+  }, [pendingDate, completedDate, countDownTime, status]);
 
   //converts time object into readable string
   const renderTime = (time) => {
@@ -112,30 +110,34 @@ const Timer = ({ pendingDate, completedDate, countDownTime }) => {
   };
 
   const renderCountdownMsg = () => {
-    if (!pendingDate) {
-      return <p>Time goal: {renderTime(timeLeft)}</p>
+    if (countDownTime) {
+      switch (status) {
+        case 'open':
+          return <p>Time goal: {renderTime(timeLeft)}</p>
+        case 'pending':
+           return <p>Time remaining: {renderTime(timeLeft)}</p>
+        case 'complete':
+          return <p><b>You have {timeLeft ? 'made it in time, congratulations!' : 'not made it in time. Plan better next time.'}</b></p>
+        default:
+          return null;
+      }
     }
-
-    if (pendingDate && !completedDate) {
-      return <p>Time remaining: {renderTime(timeLeft)}</p>
-    }
-
-    if (completedDate) {
-      return <p><b>You have {timeLeft ? 'made it in time, congratulations!' : 'not made it in time. Plan better next time.'}</b></p>
-    }
-  };
+  }
 
   const renderElapsedTimeMsg = () => {
-    return completedDate ? <p>You have done it in: {renderTime(elapsedTime)}</p> :  <p>Time elapsed: {renderTime(elapsedTime)}</p>
+    if (status !== 'open') {
+      console.log(elapsedTime)
+      return status === 'complete' ? <p>You have done it in: {renderTime(elapsedTime)}</p> : <p>Time elapsed: {renderTime(elapsedTime)}</p>
+    }
   };
 
-  const icon = countDownTime || pendingDate ? <FontAwesomeIcon icon={ faClock } style={{ fontSize: "1.5em" }} /> : null
+  const icon = countDownTime || status !== 'open' ? <FontAwesomeIcon icon={ faClock } style={{ fontSize: "1.5em" }} /> : null
 
   return (
     <div className={styles.timer}>
-      { countDownTime ? renderCountdownMsg() : null }
+      { renderCountdownMsg() }
       { icon }
-      { pendingDate ? renderElapsedTimeMsg() : null}
+      { renderElapsedTimeMsg() }
     </div>
   );
 }
@@ -143,7 +145,8 @@ const Timer = ({ pendingDate, completedDate, countDownTime }) => {
 Timer.propTypes = {
   pendingDate: PropTypes.string,
   completedDate: PropTypes.string,
-  countDownTime: PropTypes.number
+  countDownTime: PropTypes.number,
+  status: PropTypes.oneOf(['open', 'pending', 'complete']).isRequired
 };
 
 export default Timer;

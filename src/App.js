@@ -12,6 +12,7 @@ const App = () => {
   //checks if there is app state in localStorage
   useEffect(() => {
     const storedState = localStorage.getItem('IssueMasterState');
+
     if (storedState) {
       dispatch({
         type: 'SET_STORED_STATE',

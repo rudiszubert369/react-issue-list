@@ -97,6 +97,7 @@ const Issue = ( issue ) => {
             pendingDate={issue.pendingDate}
             completedDate={issue.completeDate}
             countDownTime={issue.countDownTime}
+            status={issue.status}
           />
         </div>
         {issue.status !== 'complete' ? renderStatusBtn() : null}
@@ -127,7 +128,7 @@ Issue.propTypes = {
     pendingDate: PropTypes.string,
     completeDate: PropTypes.string,
     countDownTime: PropTypes.number
-  }).isRequired
+  })
 };
 
 export default Issue;

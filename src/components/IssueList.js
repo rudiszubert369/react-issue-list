@@ -16,14 +16,16 @@ const IssueList = () => {
 
   const sortIssues = (issues, sortBy) => {
     return [...issues].sort((a, b) => {
-      if (sortBy === 'oldest') {
-        return new Date(a.addDate) - new Date(b.addDate);
-      } else if (sortBy === 'newest') {
-        return new Date(b.addDate) - new Date(a.addDate);
-      } else if (sortBy === 'title') {
-        return a.title.localeCompare(b.title);
+      switch (sortBy) {
+        case 'oldest':
+          return new Date(a.addDate) - new Date(b.addDate);
+        case 'newest':
+          return new Date(b.addDate) - new Date(a.addDate);
+        case 'title':
+          return a.title.localeCompare(b.title);
+        default:
+          return issues
       }
-      return issues
     });
   };
 

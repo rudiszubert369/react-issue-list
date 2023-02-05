@@ -44,11 +44,13 @@ const Layout = ({ children }) => {
     to: { opacity: 1, transform: 'translate3d(0,0,0)' },
     delay: 1000,
   });
+
   return (
       <HelmetProvider>
         <ThemeProvider theme={themeMode}>
           <Helmet>
           <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap" rel="stylesheet" />
+          <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           <meta name="description"
             content="IssueMaster - An application for creating and managing issues to increase productivity and get things done. Empower yourself to achieve your goals with ease."
           />

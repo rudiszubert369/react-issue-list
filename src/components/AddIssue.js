@@ -14,6 +14,7 @@ const AddIssue = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+
     if (issue.title && issue.description) {
       const currentDate = new Date();
       const newIssue = {
@@ -45,7 +46,7 @@ const AddIssue = () => {
   };
 
   //converts total minutes from countdown days, hours and minutes
-  const countDownToMinutes  = ()  => {
+  const countDownToMinutes = ()  => {
     return (Number(countDownTime.days) || 0) * 1440 + (Number(countDownTime.hours) || 0) * 60 + (Number(countDownTime.minutes) || 0);
   };
 
