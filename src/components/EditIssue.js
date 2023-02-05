@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import IssueContext from './IssueContext';
 import styles from './EditIssue.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -64,6 +65,20 @@ const EditIssue = ({ issue, toggleEditing }) => {
       </form>
     </div>
   );
+};
+
+EditIssue.propTypes = {
+  issue: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    addDate: PropTypes.string.isRequired,
+    status: PropTypes.oneOf(['open', 'pending', 'complete']).isRequired,
+    pendingDate: PropTypes.string,
+    completeDate: PropTypes.string,
+    countDownTime: PropTypes.number
+  }).isRequired,
+  toggleEditing: PropTypes.func.isRequired
 };
 
 export default EditIssue;

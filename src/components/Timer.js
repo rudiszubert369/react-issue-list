@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import styles from './Timer.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
@@ -138,5 +139,11 @@ const Timer = ({ pendingDate, completedDate, countDownTime }) => {
     </div>
   );
 }
+
+Timer.propTypes = {
+  pendingDate: PropTypes.string,
+  completedDate: PropTypes.string,
+  countDownTime: PropTypes.number
+};
 
 export default Timer;

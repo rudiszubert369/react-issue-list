@@ -1,11 +1,12 @@
 import { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import IssueContext from './IssueContext';
 import Timer from './Timer';
+import EditIssue from './EditIssue';
 import { animated, useSpring } from 'react-spring'
 import styles from './Issue.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
-import EditIssue from './EditIssue';
 
 const Issue = ( issue ) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -114,6 +115,19 @@ const Issue = ( issue ) => {
       {renderContent()}
     </animated.div>
   );
+};
+
+Issue.propTypes = {
+  issue: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    addDate: PropTypes.string.isRequired,
+    status: PropTypes.oneOf(['open', 'pending', 'complete']).isRequired,
+    pendingDate: PropTypes.string,
+    completeDate: PropTypes.string,
+    countDownTime: PropTypes.number
+  }).isRequired
 };
 
 export default Issue;

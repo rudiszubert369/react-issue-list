@@ -1,5 +1,6 @@
 import { useSpring, animated } from 'react-spring';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../styles/Theme";
@@ -44,23 +45,29 @@ const Layout = ({ children }) => {
     delay: 1000,
   });
   return (
-      <ThemeProvider theme={themeMode}>
-        <Helmet>
-        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap" rel="stylesheet" />
-        <meta name="description"
-          content="IssueMaster - An application for creating and managing issues to increase productivity and get things done. Empower yourself to achieve your goals with ease."
-        />
-        <title>IssueMaster</title>
-        </Helmet>
-        <GlobalStyles />
-        <Header>
-          <Toggle theme={theme} toggleTheme={themeToggler} />
-          <Title style={titleAnimation}>IssueMaster</Title>
-          <Tagline style={taglineAnimation}>Empowering productivity, one issue at a time</Tagline>
-        </Header>
-        <main>{children}</main>
-      </ThemeProvider>
+      <HelmetProvider>
+        <ThemeProvider theme={themeMode}>
+          <Helmet>
+          <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap" rel="stylesheet" />
+          <meta name="description"
+            content="IssueMaster - An application for creating and managing issues to increase productivity and get things done. Empower yourself to achieve your goals with ease."
+          />
+          <title>IssueMaster</title>
+          </Helmet>
+          <GlobalStyles />
+          <Header>
+            <Toggle theme={theme} toggleTheme={themeToggler} />
+            <Title style={titleAnimation}>IssueMaster</Title>
+            <Tagline style={taglineAnimation}>Empowering productivity, one issue at a time</Tagline>
+          </Header>
+          <main>{children}</main>
+        </ThemeProvider>
+      </HelmetProvider>
   );
+};
+
+Toggle.propTypes = {
+  toggleTheme: PropTypes.func.isRequired
 };
 
 export default Layout;
